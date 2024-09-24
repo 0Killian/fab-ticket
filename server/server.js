@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');  // Permet d'interpréter les requêt
 const config = require('../config');
 const sequelize = require('./sequelize/database');
 const cors = require('cors');
-const router = require('./router');
+const front_router = require('./front');
 const path = require('path');
 const hbs = require('hbs');
 
@@ -23,7 +23,7 @@ app.set('views', path.join(__dirname, '../views'));
 
 hbs.registerPartials(path.join(__dirname, '../components'));
 
-router.setup(app);
+app.use('/', front_router);
 
 // Démarre le serveur HTTP
 const server = http.createServer(app);
