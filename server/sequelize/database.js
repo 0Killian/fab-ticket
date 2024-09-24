@@ -2,7 +2,7 @@
 const { Sequelize } = require('sequelize');
 
 // Importe la configuration de la base de données
-const id = require('../../src/config.js');
+const id = require('../../config.js');
 const dbConfig = id.dbConfig;
 
 // Importe les modèles, incluant l'instance Sequelize

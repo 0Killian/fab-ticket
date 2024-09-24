@@ -11,6 +11,11 @@ async function api_login(req, res) {
   }
 }
 
+async function index(req, res) {
+  res.render('index', {subject: 'Welcome', name: 'John Doe', link: 'https://example.com/unsubscribe'});
+}
+
 module.exports.setup = (app) => {
   app.post('/api/login', api_login);
+  app.get('/', index);
 }

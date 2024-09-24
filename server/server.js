@@ -4,11 +4,12 @@ const app = express();
 const http = require('http');
 const ldap = require('ldapjs');
 const bodyParser = require('body-parser');  // Permet d'interpréter les requêtes POST avec le body JSON
-const config = require('./../src/config');
+const config = require('../config');
 const sequelize = require('./sequelize/database');
 const cors = require('cors');
 const router = require('./router');
 const path = require('path');
+const hbs = require('hbs');
 
 // Ajoutez le middleware CORS
 app.use(cors());
@@ -17,7 +18,11 @@ app.set('config', config);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, '../build/')));
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, '../views'));
+
+hbs.registerPartials(path.join(__dirname, '../components'));
+
 router.setup(app);
 
 // Démarre le serveur HTTP
