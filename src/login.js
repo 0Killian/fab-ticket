@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import config from '../config.js';
+import Cookies from 'universal-cookie';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -11,7 +13,7 @@ const Login = () => {
   
     // Envoyer la requête POST au backend pour authentification
     try {
-      const response = await fetch('http://localhost:3001/login', {
+      const response = await fetch(`http://${config.host}:${config.port}/api/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -22,6 +24,9 @@ const Login = () => {
       if (response.ok) {
         setSuccess('Authentification réussie');
         setError(null);  // Réinitialise les erreurs en cas de succès
+        const data = await response.json();
+        const cookies = new Cookies();
+        cookies.set('token', data.token, { path: '/' });
       } else {
         setError('Échec de l\'authentification');
         setSuccess(null);  // Réinitialise le message de succès en cas d'échec
