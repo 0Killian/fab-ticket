@@ -41,17 +41,22 @@ async function authenticate(config, username, password, callback) {
     return null;
   }
 
-  let user = await ldap.authenticate({
-    ldapOpts: config.ldap.opts,
-    userDn: userDn,
-    password: password,
-  });
-  
-  if (!user) {
+  try {
+    let user = await ldap.authenticate({
+      ldapOpts: config.ldap.opts,
+      userDn: userDn,
+      userPassword: password,
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  } catch (e) {
+    console.error(e);
     return null;
   }
-
-  return user;
 }
 
 /**
@@ -62,7 +67,7 @@ async function authenticate(config, username, password, callback) {
  * @returns {string}
  */
 function createToken(config, user) {
-  return jwt.sign(user, config.secret, { expiresIn: '1h' });
+  return jwt.sign(user, config.secret);
 }
 
 /**
@@ -76,3 +81,9 @@ function validate(username) {
   // Only alpha numeric
   return /^[a-z0-9]+$/i.test(username);
 }
+
+module.exports = {
+  isAuthenticated,
+  authenticate,
+  createToken
+};
