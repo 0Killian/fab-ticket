@@ -32,6 +32,19 @@ server.on('error', (error) => {
   console.error('Erreur de serveur HTTP :', error.message);
 });
 
+
+/**
+ * Dashboard api
+ */
+// >VOIR quelle data on fait 
+app.get("/dashbord", ticketController, borrowController);
+
+/**
+ * emprunt api
+ */
+app.get("/emprunt", borrowControllerController);
+
+
 // Démarrage du serveur
 app.listen(config.port, () => {
   console.log(`Serveur en écoute sur http://${config.hostname}:${config.port}`);
