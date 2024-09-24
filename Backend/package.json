@@ -1,0 +1,17 @@
+{
+  "dev": "nodemon app.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "ldapjs": "^3.0.7",
+    "mysql2": "^3.11.3",
+    "sequelize": "^6.37.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7",
+    "sequelize-cli": "^6.6.2"
+  },
+  "scripts": {
+    "start": "node app.js"
+  }
+}
