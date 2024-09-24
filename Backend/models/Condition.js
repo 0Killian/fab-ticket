@@ -10,6 +10,7 @@ const Condition = sequelize.define('Condition', {
     name: {
       type: DataTypes.STRING(100),
       allowNull: false,
+      
     },
     description: {
       type: DataTypes.TEXT,

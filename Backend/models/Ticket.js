@@ -14,6 +14,10 @@ const Ticket = sequelize.define('Ticket', {
   title: {
     type: DataTypes.STRING(100),
     allowNull: false,
+    validate:{
+      len: [1, 101],  
+      msg:"title use 100 characters max"
+    },
   },
   description: {
     type: DataTypes.TEXT,
