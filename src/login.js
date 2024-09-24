@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import config from '../config.js';
+import config from './config.js';
 import Cookies from 'universal-cookie';
 
 const Login = () => {
@@ -13,6 +13,7 @@ const Login = () => {
   
     // Envoyer la requête POST au backend pour authentification
     try {
+      console.log(`http://${config.host}:${config.port}/api/login`);
       const response = await fetch(`http://${config.host}:${config.port}/api/login`, {
         method: 'POST',
         headers: {

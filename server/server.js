@@ -4,10 +4,11 @@ const app = express();
 const http = require('http');
 const ldap = require('ldapjs');
 const bodyParser = require('body-parser');  // Permet d'interpréter les requêtes POST avec le body JSON
-const config = require('./../config');
+const config = require('./../src/config');
 const sequelize = require('./sequelize/database');
 const cors = require('cors');
 const router = require('./router');
+const path = require('path');
 
 // Ajoutez le middleware CORS
 app.use(cors());
