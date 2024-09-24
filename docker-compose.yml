@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: fabticket
+      MYSQL_USER: fabticket
+      MYSQL_PASSWORD: fabticket2024
+    ports:
+      - '3306:3306'
+    volumes:
+      - fabticket-db:/var/lib/mysql
+
+volumes:
+  fabticket-db:
+    driver: local
