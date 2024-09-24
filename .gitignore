@@ -130,6 +130,6 @@ dist
 .pnp.*
 
 
-config_ID.js
+config.js
 
-Backend/config_ID.js
+Backend/config.js

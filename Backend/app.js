@@ -4,7 +4,7 @@ const app = express();
 const http = require('http');
 const ldap = require('ldapjs');
 const bodyParser = require('body-parser');  // Permet d'interpréter les requêtes POST avec le body JSON
-const config_ID = require('./config_ID');
+const config = require('./config');
 const sequelize = require('./sequelize/database');
 const cors = require('cors');
 
@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-console.log(config_ID.port);
+console.log(config.port);
 
 // Démarre le serveur HTTP
 const server = http.createServer(app);
@@ -68,6 +68,6 @@ app.post('/login', (req, res) => {
 });
 
 // Démarrage du serveur
-app.listen(config_ID.port, () => {
-  console.log(`Serveur en écoute sur http://localhost:${config_ID.port}`);
+app.listen(config.port, () => {
+  console.log(`Serveur en écoute sur http://localhost:${config.port}`);
 });
