@@ -11,8 +11,8 @@ router.get('/ticket/create', ticketController.createTicket, (req, res) => {
 });
 
 // list all ticket
-router.get('/tickets', ticketController.getAllTicket ,(req, res) => {
-    res.render('tickets', { title: 'Liste des Tickets' });
+router.get('/tickets',(req, res) => {
+    res.render('tickets', {layout: 'main', title: 'Liste des Tickets' });
 });
 
 // select 1 tickt
