@@ -1,17 +1,17 @@
 const Ticket = require("../models/Ticket")
 
 
-const getAllTicket = async (res,req) => {
+const getAllTicket = async (req,res) => {
     try {
-        const Ticket = await Ticket.findAll();
-        res.status(200).json("get all tickets")
+        const ticket = await Ticket.findAll();
+        res.status(200).json(ticket);
     } catch (error) {
         console.error("error to get user:", error)
-        res.status(402).json("error")
+        res.status(500);
     }
 }
 
-const getTicketById = async (res,req) => {
+const getTicketById = async (req,res) => {
     try {
         const id = req.params.id;
         const modifyTicket = await Ticket.findByPk(id)
@@ -29,7 +29,7 @@ const getTicketById = async (res,req) => {
     }
 }
 
-const updateTicket = async(res, req) =>{
+const updateTicket = async(req, res) =>{
     try {
         const id = req.params.id;
         const modifyTicket = await Ticket.findByPk(id);
@@ -55,21 +55,18 @@ const updateTicket = async(res, req) =>{
     }
 }
 
+const createTicket = async (req, res) => {
+    const { status, title, description } = req.body;
 
-
-const createTicket = async(res, req) => {
-
-    const { status, title, description }  = req.body
-
-    if( !status || !title || !description ){
-        console.error("error not found")
-        res.status(404)
+    if( status === undefined || title === undefined || description === undefined) {
+        console.error("data missing");
+        res.status(404);
     }
 
     try {
-        const newTicket = Ticket.create({ status, title, description });
+        const newTicket = await Ticket.create({ status, title, description });
         console.log("Ticket is updated",newTicket);
-        res.status(200).json("Ticket is updated",newTicket)
+        res.status(200).end();
     } catch (error) {
         console.error("Ticket not found")
         res.status(404).json("Ticket not found")

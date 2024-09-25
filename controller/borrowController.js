@@ -4,80 +4,78 @@ const borrow = require("../models/Borrow")
 const getAllBorrow = async (req,res) => {
     try {
         const borrows = await borrow.findAll();
-        console.log(borrows)
-        res.status(200).json("get all tickets")
+        console.log(borrows);
+        res.status(200).json(borrows);
     } catch (error) {
-        console.error("error to get user:", error)
-        res.status(500).json("not founnd", error)
+        console.error("Failed to get borrows:", error)
+        res.status(500);
     }
 }
 
 const getBorrowById = async (req,res) => {
     try {
         const id = req.params.id;
-        const selectedBorrow = await borrow.findByPk(id)
-        if(!selectedBorrow){
-            const msg = " borrow not found"
-            console;log(msg)
-            res.status(404, msg)
+        const selectedBorrow = await borrow.findByPk(id);
+        if(!selectedBorrow) {
+            console.log("borrow not found");
+            res.statut(404);
         }
 
-        res.status(200).json(`find id: ${id}`)
+        res.status(200).json(selectedBorrow);
     } catch (error) {
-        console.error("borrow not found:", error)
-        res.status(404).json("Ticket not found:", error)
+        console.error("Failed to get borrow:", error);
+        res.status(500);
     }
 }
 
 
-const updateBorrow = async(res, req) =>{
+const updateBorrow = async (req, res) =>{
     try {
         const id = req.params.id;
         const modifyBorrow = await borrow.findByPk(id);
 
-        if(!modifyBorrow){
-            const msg = " Borrow not found"
-            console;log(msg)
-            res.status(404, msg)
+        const { startDate, endDate, userId, materialId, commentary } = req.body;
+
+        if(!modifyBorrow) {
+            console.log("borrow not found");
+            res.statut(404);
         }
 
-        modifyBorrow.startDate = req.body.startDate || modifyBorrow.startDate;
-        modifyBorrow.endDate = req.body.endDate || modifyBorrow.endDate;
-        modifyBorrow.userId = req.body.userId || modifyBorrow.userId;
-        modifyBorrow.materialId = req.body.materialId || modifyBorrow.materialId;
-        modifyBorrow.commentary = req.body.commentary || modifyBorrow.commentary;
-        
+        modifyBorrow.startDate = startDate || modifyBorrow.startDate;
+        modifyBorrow.endDate = endDate || modifyBorrow.endDate;
+        modifyBorrow.userId = userId || modifyBorrow.userId;
+        modifyBorrow.materialId = materialId || modifyBorrow.materialId;
+        modifyBorrow.description = commentary || modifyBorrow.commentary;
+
         await modifyBorrow.save();
         console.log('update is successfull');
-        res.status(200).json("update successfull")
-        
+
+        res.status(200);
     } catch (error) {
-        console.error("Borrow not found:", error)
-        res.status(404)
+        console.error("Failed to update a borrow: ", error)
+        res.status(500);
     }
 }
 
-const createBorrow = async(res, req) => {
+const createBorrow = async (req, res) => {
+    const { startDate, endDate, userId, materialId, commentary } = req.body;
 
-    const { startDate, endDate, userId, materialId, commentary }  = req.body
-
-    if( !startDate || !endDate ||  !userId || !materialId || !commentary ){
-        console.error("error not found")
-        res.status(404).json("Ticket not found:", error)
+    if( startDate === undefined || endDate === undefined || userId === undefined || !materialId === undefined|| commentary === undefined ){
+        console.error("error not found");
+        res.status(404);
     }
 
     try {
         const newBorrow = borrow.create({ startDate, endDate, userId, materialId, commentary });
-        console.log("Borrow is updated", newBorrow);
-        res.status(200).json("Borrow is updated");
+        console.log("New borrow was created: ", newBorrow);
+        res.status(200);
     } catch (error) {
-        console.error("Borrow not found", newBorrow)
-        res.status(404).json("Borrow not found")
+        console.error("Failed to create a borrow:", error);
+        res.status(500);
     }     
 }
 
-const deleteBorrowById = async (res, req) => {
-
+const deleteBorrowById = async (req, res) => {
     const id = req.params.id;
 
     try {
@@ -85,21 +83,20 @@ const deleteBorrowById = async (res, req) => {
             where: {
                 id: deleteBorrow.id
             }
-        })
-        console.log(`Borrow ${deleteBorrow.id}`);
-        res.status(200).json(`Borrow ${id} is deleted`)
+        });
+        console.log("Deleted borrow", deleteBorrow.id);
+        res.status(200);
     } catch (error) {
-        console.error("Borrow not found")
-        res.status(404).json("borrow not found")
+        console.error("Failed to delete borrow");
+        res.status(500);
     }
 }
 
 
-module.exports= {
+module.exports = {
     getAllBorrow,
     getBorrowById,
     updateBorrow,
     createBorrow,
     deleteBorrowById
-}
-    
+};

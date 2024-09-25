@@ -22,7 +22,7 @@ async function connectToDatabase() {
         console.log('Connection with SEQUELIZE has been established successfully.');
         
         // Synchronisation des modèles avec la base de données
-        await sequelize.sync({ force: true });
+        await sequelize.sync();
         console.log('Database synced successfully.');
 
     } catch (error) {
