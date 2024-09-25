@@ -11,7 +11,6 @@ const hbs = require('hbs');
 const api = require('./api');
 const fs = require('fs');
 
-
 const baseUrl = `${config.protocol}://${config.hostname}:${config.port}`;
 
 // Serve static assets (CSS, images, JS) from the "public" directory
@@ -40,6 +39,19 @@ app.locals = {
 // Frontend router
 app.use('/', front_router);
 app.use('/api', api);
+
+// Error handling middleware for 404
+app.use((req, res, next) => {
+  res.status(404);
+  res.render('errors/404'); // Render the 404 page
+});
+
+// Error handling middleware for 500
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log the error stack
+  res.status(500);
+  res.render('errors/500'); // Render the 500 page
+});
 
 // Configuration du serveur
 let opts = {};
