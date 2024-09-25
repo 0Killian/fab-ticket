@@ -1,8 +1,7 @@
-/* init express */
+/* Initialize Express */
 const express = require('express');
 const app = express();
 const http = require('http');
-const bodyParser = require('body-parser');  // Permet d'interpréter les requêtes POST avec le body JSON
 const config = require('../config');
 const sequelize = require('./sequelize/database');
 const cors = require('cors');
@@ -11,9 +10,12 @@ const path = require('path');
 const hbs = require('hbs');
 const api = require('./api');
 
-const baseUrl = '${config.protocol}://${config.hostname}:${config.port}';
+const baseUrl = `${config.protocol}://${config.hostname}:${config.port}`;
 
-// Ajoutez le middleware CORS
+// Serve static assets (CSS, images, JS) from the "public" directory
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Enable CORS
 app.use(cors());
 
 // App context
@@ -21,12 +23,13 @@ app.set('config', config);
 
 // Utiliser body-parser pour lire les données envoyées dans les requêtes POST
 app.use(express.json());
-//app.use(bodyParser.urlencoded({ extended: true }));
 
 // Templating
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, '../views'));
-hbs.registerPartials(path.join(__dirname, '../components'));
+
+// Register Handlebars partials
+hbs.registerPartials(path.join(__dirname, '../views/partials'));
 app.locals = {
   ...app.locals,
   baseUrl: baseUrl
@@ -48,10 +51,10 @@ if (config.https) {
 const server = http.createServer(opts, app);
 
 server.on('error', (error) => {
-  console.error('Erreur de serveur HTTP :', error.message);
+  console.error('HTTP Server Error:', error.message);
 });
 
-// Démarrage du serveur
+// Start the server
 app.listen(config.port, () => {
   console.log(`Serveur en écoute sur ${baseUrl}`);
 });
