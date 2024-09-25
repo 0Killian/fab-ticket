@@ -2,7 +2,7 @@
 const { Sequelize } = require('sequelize');
 
 // Importe la configuration de la base de données
-const id = require('../../src/config.js');
+const id = require('../../config.js');
 const dbConfig = id.dbConfig;
 
 // Importe les modèles, incluant l'instance Sequelize
@@ -20,9 +20,9 @@ async function connectToDatabase() {
         // Authentification à la base de données
         await sequelize.authenticate();
         console.log('Connection with SEQUELIZE has been established successfully.');
-        
+
         // Synchronisation des modèles avec la base de données
-        await sequelize.sync({ force: true });
+        await sequelize.sync();
         console.log('Database synced successfully.');
 
     } catch (error) {
