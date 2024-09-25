@@ -4,6 +4,7 @@ const ticketController = require("../controller/ticketController");
 const borrowController = require("../controller/borrowController");
 const materialController = require("../controller/materialController");
 const { Op } = require('sequelize');
+const { Parser } = require('json2csv');
 const moment = require('moment');
 
 
@@ -70,7 +71,6 @@ router.get('/login', (req, res) => {
     res.render('login', {title: 'Connexion' });
 });
 
-const ticketCounts = [0, 0, 0, 0, 0, 0, 0];
 
 adminRouter.get('/dashboard', async (req, res) => {
   let opened_tickets_count = await Ticket.count({
@@ -78,7 +78,7 @@ adminRouter.get('/dashboard', async (req, res) => {
   });
 
   let ongoing_borrows_count = await Borrow.count({
-    where: { endDate: { [Op.gt]: new Date() } } // Use endDate instead of end_date
+    where: { endDate: { [Op.gt]: new Date() } }
   });
 
   let created_tickets_count = await Ticket.count({
@@ -138,8 +138,6 @@ adminRouter.get('/dashboard', async (req, res) => {
       date: today.clone().subtract(i, 'days').format('DD/MM'),
       count: closedCount
     });
-
-
   }
 
   // JSON propre à envoyer au front
@@ -153,17 +151,52 @@ adminRouter.get('/dashboard', async (req, res) => {
     data: closed_tickets_last_7_days.map(entry => entry.count).reverse()
   };
 
+  let borrows = await Borrow.findAll();
+
   let items_count = await Material.count();
-  res.render('dashboard', { layout: 'main', title: 'Dashboard', opened_tickets_count, ongoing_borrows_count, items_count, created_tickets_count, closed_tickets_count, created_tickets_data: JSON.stringify(created_tickets_data), closed_tickets_data: JSON.stringify(closed_tickets_data) });
+  res.render('dashboard', { layout: 'main', title: 'Dashboard', opened_tickets_count, ongoing_borrows_count, items_count, created_tickets_count, closed_tickets_count, created_tickets_data: JSON.stringify(created_tickets_data), closed_tickets_data: JSON.stringify(closed_tickets_data), borrows });
 });
 
-adminRouter.get('/inventory', (req, res) => {
-  res.render('inventory', {layout: 'main', title: 'Inventaire' });
+adminRouter.get('/inventory', async (req, res) => {
+  let materials = await Material.findAll();
+
+  // change the date format
+  materials.forEach(material => {
+    material.dataValues.buyDate = moment(material.dataValues.buyDate).format('DD/MM/YYYY');
+  });
+
+  res.render('inventory', {layout: 'main', title: 'Inventaire', materials});
 });
 
+adminRouter.get('/export/data', async (req, res) => {
+  try {
+    // Fetch data from the Material model
+    const data = await Material.findAll();
 
-router.get('/tickets', (req, res) => {
-  res.render('tickets', {layout: 'main', title: 'Tickets'});
+    // Convert the data to a format suitable for CSV
+    const jsonData = data.map(material => material.toJSON()); // Convert Sequelize instances to plain objects
+
+    // Convert JSON to CSV
+    const csvParser = new Parser();
+    const csv = csvParser.parse(jsonData);
+
+    // Set headers for the response
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename=inventory.csv`);
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Pragma', 'no-cache');
+
+    // Send the CSV data
+    res.status(200).send(csv);
+  } catch (error) {
+    console.error('Error exporting data:', error);
+    res.status(500).send('Error exporting data');
+  }
+});
+
+router.get('/tickets',async (req, res) => {
+  let tickets = await Ticket.findAll();
+  res.render('tickets', {layout: 'main', title: 'Tickets', tickets});
 });
 
 router.get('/borrows', auth.isAuthenticated, (req, res) => {
@@ -175,6 +208,7 @@ router.use('/admin', adminRouter);
 router.get('/login', (req, res) => {
   res.render('login', {title: "Login"});
 });
+
 
 module.exports = router;
 
