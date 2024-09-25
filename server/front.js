@@ -3,6 +3,7 @@ let router = require('express').Router();
 const ticketController = require("../controller/ticketController");
 const borrowController = require("../controller/borrowController");
 const materialController = require("../controller/materialController");
+const { Op } = require('sequelize');
 
 const Ticket = require("../models/Ticket");
 const Borrow = require("../models/Borrow");
@@ -68,16 +69,33 @@ router.get('/login', (req, res) => {
 });
 
 adminRouter.get('/dashboard', async (req, res) => {
-    let opened_tickets_count = await Ticket.count({
-        where: { status: 0 }
-    });
+  let opened_tickets_count = await Ticket.count({
+    where: { status: 0 }
+  });
 
-    let ongoing_borrows_count = await Borrow.count({
-        where: { status: 1 }
-    });
+  let ongoing_borrows_count = await Borrow.count({
+    where: { endDate: { [Op.gt]: new Date() } } // Use endDate instead of end_date
+  });
 
-    let items_count = await Material.count();
-    res.render('dashboard', {layout: 'main', title: 'Dashboard', opened_tickets_count, ongoing_borrows_count, items_count});
+  let created_tickets_count = await Ticket.count({
+    where: {
+      creationDate: {
+        [Op.gt]: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+      }
+    }
+  });
+
+  let closed_tickets_count = await Ticket.count({
+    where: {
+        status: 2,
+        creationDate: { 
+            [Op.gt]: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+        }
+    }
+  });
+
+  let items_count = await Material.count();
+  res.render('dashboard', { layout: 'main', title: 'Dashboard', opened_tickets_count, ongoing_borrows_count, items_count, created_tickets_count, closed_tickets_count });
 });
 
 adminRouter.get('/inventory', (req, res) => {

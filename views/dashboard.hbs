@@ -65,26 +65,20 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 <div class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md lg:col-span-2 dark:bg-gray-900 dark:border-gray-800">
                     <div class="flex justify-between mb-4 items-start">
-                        <div class="font-medium dark:text-gray-200">Tickets de la semaine</div>
+                        <div class="font-medium dark:text-gray-200">Tickets des 7 derniers jours</div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-4">
                         <div class="rounded-md border border-dashed border-gray-200 p-4 dark:border-gray-700">
                             <div class="flex items-center mb-0.5">
-                                <div class="text-xl font-semibold dark:text-gray-200">10</div>
+                                <div class="text-xl font-semibold dark:text-gray-200">{{created_tickets_count}}</div>
                             </div>
                             <span class="text-gray-400 text-sm">Ouvert</span>
                         </div>
                         <div class="rounded-md border border-dashed border-gray-200 p-4 dark:border-gray-700">
                             <div class="flex items-center mb-0.5">
-                                <div class="text-xl font-semibold dark:text-gray-200">50</div>
+                                <div class="text-xl font-semibold dark:text-gray-200">{{closed_tickets_count}}</div>
                             </div>
                             <span class="text-gray-400 text-sm">Fermé</span>
-                        </div>
-                        <div class="rounded-md border border-dashed border-gray-200 p-4 dark:border-gray-700">
-                            <div class="flex items-center mb-0.5">
-                                <div class="text-xl font-semibold dark:text-gray-200">4</div>
-                            </div>
-                            <span class="text-gray-400 text-sm">En Cours</span>
                         </div>
                     </div>
                     <div>
@@ -246,17 +240,7 @@
                         borderColor: 'rgb(16, 185, 129)',
                         backgroundColor: 'rgb(16 185 129 / .05)',
                         tension: .2
-                    },
-                    {
-                        label: 'En cours',
-                        data: generateRandomData(7),
-                        borderWidth: 1,
-                        fill: true,
-                        pointBackgroundColor: 'rgb(244, 63, 94)',
-                        borderColor: 'rgb(244, 63, 94)',
-                        backgroundColor: 'rgb(244 63 94 / .05)',
-                        tension: .2
-                    },
+                    }
                 ]
             },
             options: {
