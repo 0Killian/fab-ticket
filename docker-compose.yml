@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.8'
 
 services:
   devcontainer:
@@ -65,20 +65,21 @@ services:
   database:
     image: 'mariadb:latest'
     container_name: database
-
-  db:
-    image: mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: fabticket
-      MYSQL_USER: fabticket
-      MYSQL_PASSWORD: fabticket2024
+      - MYSQL_USER=fabticket
+      - MYSQL_PASSWORD=fabticket2024
+      - MYSQL_DATABASE=fabticket
+      - MYSQL_ROOT_PASSWORD=fabticket2024
     ports:
-      - '3306:3306'
+      - '20:3306'
     volumes:
-      - fabticket-db:/var/lib/mysql
+      - ${PWD}/mariadb/:/var/lib/mysql/
 
 volumes:
-  fabticket-db:
+  slapd:
+    driver: local
+  ldap:
+    driver: local
+  certs:
     driver: local
