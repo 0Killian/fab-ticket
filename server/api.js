@@ -1,5 +1,6 @@
 const express = require("express")
 const router = express.Router();
+const auth = require("./auth");
 const ticketController = require("../controller/ticketController");
 const borrowController = require("../controller/borrowController");
 const searchController = require("../controller/searchController");
@@ -29,10 +30,17 @@ router.get("/search", searchController.search);
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
-    if (username === "admin" && password === "admin") {
-        res.status(200)
+    if (username === undefined || password === undefined) {
+        console.error("data missing");
+        res.status(404);
+    }
+
+    const user = await auth.authenticate(req.app.get('config'), username, password);
+    if (user) {
+        const token = auth.createToken(user);
+        res.status(200).json({ token });
     } else {
-        res.status(401)
+        res.status(404);
     }
 })
 
