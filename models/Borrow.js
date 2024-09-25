@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../sequelize/database'); 
+const sequelize = require('../server/sequelize/database'); 
 
 const Borrow = sequelize.define('Borrow', {
   id: {

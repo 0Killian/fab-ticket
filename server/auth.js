@@ -102,6 +102,7 @@ function validate(username) {
 }
 
 module.exports = {
+  isAdmin,
   isAuthenticated,
   authenticate,
   createToken

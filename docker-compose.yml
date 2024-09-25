@@ -2,15 +2,15 @@ version: '3.8'
 
 services:
   devcontainer:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - ../..:/workspaces:cached      
-    network_mode: service:database
-    depends_on:
-      - database
-      - openldap
+   build: 
+     context: .
+     dockerfile: Dockerfile
+   volumes:
+     - ./:/opt/fab-ticket:cached      
+   network_mode: service:database
+   depends_on:
+     - database
+     - openldap
 
   openldap:
     image: osixia/openldap:latest
