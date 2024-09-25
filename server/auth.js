@@ -65,11 +65,16 @@ async function authenticate(config, username, password, callback) {
       groupsSearchBase: config.ldap.groupsSearchBase,
       groupClass: config.ldap.groupClass,
       groupMemberAttribute: config.ldap.groupMemberAttribute,
+      usernameAttribute: config.ldap.usernameAttribute,
+      userSearchBase: config.ldap.usersSearchBase,
+      username
     });
 
     if (!user) {
       return null;
     }
+
+    user.groups = user.groups.map(group => group.objectName.split(',')[0].split('=')[1]);
 
     return user;
   } catch (e) {

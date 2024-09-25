@@ -46,8 +46,9 @@ router.post('/login', async (req, res) => {
 
     const user = await auth.authenticate(req.app.get('config'), username, password);
     if (user) {
-        const token = auth.createToken(user);
-        res.status(200).json({ token });
+        const token = auth.createToken(req.app.get('config'), user);
+        console.log(user);
+        res.status(200).json({ token, groups: user.groups });
     } else {
         res.status(404);
     }
