@@ -43,6 +43,11 @@ const updateTicket = async(req, res) => {
 
         const modifyTicket = await Ticket.findByPk(id);
 
+        if (req.user.uid !== modifyTicket.author && !req.user.groups.includes('admin')) {
+            console.error("Unauthorized access");
+            res.status(403).end();
+        }
+
         if (!modifyTicket) {
             console.log("Ticket not found: " + id);
             res.status(404).end();
@@ -64,14 +69,15 @@ const updateTicket = async(req, res) => {
 
 const createTicket = async (req, res) => {
     const { status, title, description } = req.body;
+    const author = req.user.uid;
 
     if( status === undefined || title === undefined || description === undefined) {
-        console.error("data missing");
-        res.status(404).end();
+        console.error("Missing parameters");
+        res.status(400).end();
     }
 
     try {
-        const newTicket = await Ticket.create({ status, title, description });
+        const newTicket = await Ticket.create({ status, title, description, author });
         console.log("Created new ticket: ", newTicket.dataValues);
         res.status(200).end();
     } catch (error) {
@@ -106,4 +112,3 @@ module.exports = {
     createTicket,
     deleteTicketById
 }
-    
