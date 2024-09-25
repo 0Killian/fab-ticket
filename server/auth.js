@@ -34,7 +34,7 @@ function isAuthenticated(req, res, next) {
  */
 function isAdmin(req, res, next) {
   const config = req.app.get('config');
-  if (req.user[config.ldap.groupAttribute] === config.ldap.adminGroup) {
+  if (req.user.groups.includes(config.ldap.adminGroup)) {
     next();
   } else {
     res.status(403).render('forbidden', {config: req.app.get('config')});
@@ -62,6 +62,9 @@ async function authenticate(config, username, password, callback) {
       ldapOpts: config.ldap.opts,
       userDn: userDn,
       userPassword: password,
+      groupsSearchBase: config.ldap.groupsSearchBase,
+      groupClass: config.ldap.groupClass,
+      groupMemberAttribute: config.ldap.groupMemberAttribute,
     });
 
     if (!user) {
