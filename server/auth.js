@@ -26,6 +26,22 @@ function isAuthenticated(req, res, next) {
 }
 
 /**
+ * Middleware to check if a user is admin
+ *
+ * @param req {object}
+ * @param res {object}
+ * @param next {function}
+ */
+function isAdmin(req, res, next) {
+  const config = req.app.get('config');
+  if (req.user.groups.includes(config.ldap.adminGroup)) {
+    next();
+  } else {
+    res.status(403).render('forbidden', {config: req.app.get('config')});
+  }
+}
+
+/**
  * Authenticate through LDAP
  *
  * @param config {object}
@@ -46,6 +62,9 @@ async function authenticate(config, username, password, callback) {
       ldapOpts: config.ldap.opts,
       userDn: userDn,
       userPassword: password,
+      groupsSearchBase: config.ldap.groupsSearchBase,
+      groupClass: config.ldap.groupClass,
+      groupMemberAttribute: config.ldap.groupMemberAttribute,
     });
 
     if (!user) {
