@@ -215,15 +215,18 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
-                    // start: Chart
+        
+        const createdTicketsData = {{{created_tickets_data}}};
+        const closedTicketsData = {{{closed_tickets_data}}};
+
         new Chart(document.getElementById('order-chart'), {
             type: 'line',
             data: {
-                labels: generateNDays(7),
+                labels: createdTicketsData.labels,
                 datasets: [
                     {
                         label: 'Ouvert',
-                        data: generateRandomData(7),
+                        data: createdTicketsData.data,
                         borderWidth: 1,
                         fill: true,
                         pointBackgroundColor: 'rgb(59, 130, 246)',
@@ -233,7 +236,7 @@
                     },
                     {
                         label: 'Terminé',
-                        data: generateRandomData(7),
+                        data: closedTicketsData.data,
                         borderWidth: 1,
                         fill: true,
                         pointBackgroundColor: 'rgb(16, 185, 129)',
@@ -257,7 +260,7 @@
             for(let i=0; i<n; i++) {
                 const date = new Date()
                 date.setDate(date.getDate()-i)
-                data.push(date.toLocaleString('en-US', {
+                data.push(date.toLocaleString('fr-FR', {
                     month: 'short',
                     day: 'numeric'
                 }))
