@@ -26,6 +26,22 @@ function isAuthenticated(req, res, next) {
 }
 
 /**
+ * Middleware to check if a user is admin
+ *
+ * @param req {object}
+ * @param res {object}
+ * @param next {function}
+ */
+function isAdmin(req, res, next) {
+  const config = req.app.get('config');
+  if (req.user[config.ldap.groupAttribute] === config.ldap.adminGroup) {
+    next();
+  } else {
+    res.status(403).render('forbidden', {config: req.app.get('config')});
+  }
+}
+
+/**
  * Authenticate through LDAP
  *
  * @param config {object}
