@@ -30,7 +30,7 @@ router.get('/borrows/create', borrowController.createBorrow, (req, res) => {
 });
 
 // list all borrows
-router.get('/borrows', borrowController.getAllBurrow ,(req, res) => {
+router.get('/borrows', borrowController.getAllBorrow ,(req, res) => {
     res.render('borrows', { title: 'Liste des Tickets' });
 });
 
