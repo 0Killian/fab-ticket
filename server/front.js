@@ -4,6 +4,9 @@ const ticketController = require("../controller/ticketController");
 const borrowController = require("../controller/borrowController");
 const materialController = require("../controller/materialController");
 
+const Ticket = require("../models/Ticket");
+const Borrow = require("../models/Borrow");
+const Material = require("../models/Material");
 
 // create ticket
 router.get('/ticket/create', ticketController.createTicket, (req, res) => {
@@ -61,11 +64,20 @@ router.get('/material/:id', materialController.getMaterialById,(req, res) => {
 let adminRouter = require('express').Router();
 
 router.get('/login', (req, res) => {
-  res.render('login', {title: 'Connexion' });
+    res.render('login', {title: 'Connexion' });
 });
 
-adminRouter.get('/dashboard', (req, res) => {
-  res.render('dashboard', {layout: 'main', title: 'Dashboard' });
+adminRouter.get('/dashboard', async (req, res) => {
+    let opened_tickets_count = await Ticket.count({
+        where: { status: 0 }
+    });
+
+    let ongoing_borrows_count = await Borrow.count({
+        where: { status: 1 }
+    });
+
+    let items_count = await Material.count();
+    res.render('dashboard', {layout: 'main', title: 'Dashboard', opened_tickets_count, ongoing_borrows_count, items_count});
 });
 
 adminRouter.get('/inventory', (req, res) => {
