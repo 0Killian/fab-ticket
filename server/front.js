@@ -46,7 +46,7 @@ router.get('/tickets', async (req, res) => {
         })
         .map(async t => {
             let ticket = await t;
-            
+
             if (ticket.status === 0) {
                 ticket.status = "Ouvert";
                 ticket.statusClasses = "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
@@ -81,7 +81,7 @@ router.get('/borrows/create', borrowController.createBorrow, (req, res) => {
 });
 
 // list all borrows
-router.get('/borrows', borrowController.getAllBorrow ,(req, res) => {
+router.get('/borrows', borrowController.getAllBorrow, (req, res) => {
     res.render('borrows', { title: 'Liste des Emprunts' });
 });
 
@@ -100,19 +100,19 @@ router.get('/material/create', materialController.createMaterial, (req, res) => 
 });
 
 // list all materials
-router.get('/material', materialController.getAllMaterial ,(req, res) => {
+router.get('/material', materialController.getAllMaterial, (req, res) => {
     res.render('burrows', { title: 'Liste des Tickets' });
 });
 
 // select 1 material
-router.get('/material/:id', materialController.getMaterialById,(req, res) => {
+router.get('/material/:id', materialController.getMaterialById, (req, res) => {
     res.render('materialDetails', { title: 'Détails du Ticket', ticketId: req.params.id });
 });
 
 let adminRouter = require('express').Router();
 
 router.get('/login', (req, res) => {
-    res.render('login', {title: 'Connexion' });
+    res.render('login', { title: 'Connexion' });
 });
 
 
@@ -142,115 +142,115 @@ adminRouter.get('/dashboard', async (req, res) => {
         }
     });
 
-  let today = moment().startOf('day');
+    let today = moment().startOf('day');
 
-  // Array for created tickets for the last 7 days
-  let created_tickets_last_7_days = [];
-  // Array for closed tickets for the last 7 days
-  let closed_tickets_last_7_days = [];
+    // Array for created tickets for the last 7 days
+    let created_tickets_last_7_days = [];
+    // Array for closed tickets for the last 7 days
+    let closed_tickets_last_7_days = [];
 
-  // Loop through the last 7 days
-  for (let i = 0; i < 7; i++) {
-    let startOfDay = today.clone().subtract(i, 'days').toDate();  // Start of day i
-    let endOfDay = today.clone().subtract(i - 1, 'days').toDate(); // End of day i
+    // Loop through the last 7 days
+    for (let i = 0; i < 7; i++) {
+        let startOfDay = today.clone().subtract(i, 'days').toDate();  // Start of day i
+        let endOfDay = today.clone().subtract(i - 1, 'days').toDate(); // End of day i
 
-    let createdCount = await Ticket.count({
-      where: {
-        creationDate: {
-          [Op.between]: [startOfDay, endOfDay] // Period between startOfDay and endOfDay
-        }
-      }
-    });
+        let createdCount = await Ticket.count({
+            where: {
+                creationDate: {
+                    [Op.between]: [startOfDay, endOfDay] // Period between startOfDay and endOfDay
+                }
+            }
+        });
 
-    // Count closed tickets
-    let closedCount = await Ticket.count({
-      where: {
-        status: 2,
-        creationDate: {
-          [Op.between]: [startOfDay, endOfDay]
-        }
-      }
-    });
+        // Count closed tickets
+        let closedCount = await Ticket.count({
+            where: {
+                status: 2,
+                creationDate: {
+                    [Op.between]: [startOfDay, endOfDay]
+                }
+            }
+        });
 
-    // Add to the array
-    created_tickets_last_7_days.push({
-      date: today.clone().subtract(i, 'days').format('DD/MM'),
-      count: createdCount
-    });
+        // Add to the array
+        created_tickets_last_7_days.push({
+            date: today.clone().subtract(i, 'days').format('DD/MM'),
+            count: createdCount
+        });
 
-    closed_tickets_last_7_days.push({
-      date: today.clone().subtract(i, 'days').format('DD/MM'),
-      count: closedCount
-    });
-  }
+        closed_tickets_last_7_days.push({
+            date: today.clone().subtract(i, 'days').format('DD/MM'),
+            count: closedCount
+        });
+    }
 
-  // JSON propre à envoyer au front
-  let created_tickets_data = {
-    labels: created_tickets_last_7_days.map(entry => entry.date).reverse(),
-    data: created_tickets_last_7_days.map(entry => entry.count).reverse()
-  };
+    // JSON propre à envoyer au front
+    let created_tickets_data = {
+        labels: created_tickets_last_7_days.map(entry => entry.date).reverse(),
+        data: created_tickets_last_7_days.map(entry => entry.count).reverse()
+    };
 
-  let closed_tickets_data = {
-    labels: closed_tickets_last_7_days.map(entry => entry.date).reverse(),
-    data: closed_tickets_last_7_days.map(entry => entry.count).reverse()
-  };
+    let closed_tickets_data = {
+        labels: closed_tickets_last_7_days.map(entry => entry.date).reverse(),
+        data: closed_tickets_last_7_days.map(entry => entry.count).reverse()
+    };
 
-  let borrows = await Borrow.findAll();
+    let borrows = await Borrow.findAll();
 
-  let items_count = await Material.count();
-  res.render('dashboard', { layout: 'main', title: 'Dashboard', opened_tickets_count, ongoing_borrows_count, items_count, created_tickets_count, closed_tickets_count, created_tickets_data: JSON.stringify(created_tickets_data), closed_tickets_data: JSON.stringify(closed_tickets_data), borrows });
+    let items_count = await Material.count();
+    res.render('dashboard', { layout: 'main', title: 'Dashboard', opened_tickets_count, ongoing_borrows_count, items_count, created_tickets_count, closed_tickets_count, created_tickets_data: JSON.stringify(created_tickets_data), closed_tickets_data: JSON.stringify(closed_tickets_data), borrows });
 });
 
 adminRouter.get('/inventory', async (req, res) => {
-  let materials = await Material.findAll();
+    let materials = await Material.findAll();
 
-  // change the date format
-  materials.forEach(material => {
-    material.dataValues.buyDate = moment(material.dataValues.buyDate).format('DD/MM/YYYY');
-  });
+    // change the date format
+    materials.forEach(material => {
+        material.dataValues.buyDate = moment(material.dataValues.buyDate).format('DD/MM/YYYY');
+    });
 
-  res.render('inventory', {layout: 'main', title: 'Inventaire', materials});
+    res.render('inventory', { layout: 'main', title: 'Inventaire', materials });
 });
 
 adminRouter.get('/export/data', async (req, res) => {
-  try {
-    // Fetch data from the Material model
-    const data = await Material.findAll();
+    try {
+        // Fetch data from the Material model
+        const data = await Material.findAll();
 
-    // Convert the data to a format suitable for CSV
-    const jsonData = data.map(material => material.toJSON()); // Convert Sequelize instances to plain objects
+        // Convert the data to a format suitable for CSV
+        const jsonData = data.map(material => material.toJSON()); // Convert Sequelize instances to plain objects
 
-    // Convert JSON to CSV
-    const csvParser = new Parser();
-    const csv = csvParser.parse(jsonData);
+        // Convert JSON to CSV
+        const csvParser = new Parser();
+        const csv = csvParser.parse(jsonData);
 
-    // Set headers for the response
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', `attachment; filename=inventory.csv`);
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Pragma', 'no-cache');
+        // Set headers for the response
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', `attachment; filename=inventory.csv`);
+        res.setHeader('Cache-Control', 'no-cache');
+        res.setHeader('Pragma', 'no-cache');
 
-    // Send the CSV data
-    res.status(200).send(csv);
-  } catch (error) {
-    console.error('Error exporting data:', error);
-    res.status(500).send('Error exporting data');
-  }
+        // Send the CSV data
+        res.status(200).send(csv);
+    } catch (error) {
+        console.error('Error exporting data:', error);
+        res.status(500).send('Error exporting data');
+    }
 });
 
-router.get('/tickets',async (req, res) => {
-  let tickets = await Ticket.findAll();
-  res.render('tickets', {layout: 'main', title: 'Tickets', tickets});
+router.get('/tickets', async (req, res) => {
+    let tickets = await Ticket.findAll();
+    res.render('tickets', { layout: 'main', title: 'Tickets', tickets });
 });
 
 router.get('/borrows', auth.isAuthenticated, (req, res) => {
-    res.render('borrows', {layout: 'main', title: 'Emprunts'});
+    res.render('borrows', { layout: 'main', title: 'Emprunts' });
 });
 
 router.use('/admin', adminRouter);
 
 router.get('/login', (req, res) => {
-    res.render('login', {title: "Login"});
+    res.render('login', { title: "Login" });
 });
 
 
