@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../sequelize/database'); 
 
-
 const Borrow = sequelize.define('Borrow', {
   id: {
     type: DataTypes.INTEGER,
