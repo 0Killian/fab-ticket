@@ -2,7 +2,6 @@
 const express = require('express');
 const app = express();
 const http = require('http');
-const ldap = require('ldapjs');
 const bodyParser = require('body-parser');  // Permet d'interpréter les requêtes POST avec le body JSON
 const config = require('../config');
 const sequelize = require('./sequelize/database');
@@ -10,6 +9,7 @@ const cors = require('cors');
 const front_router = require('./front');
 const path = require('path');
 const hbs = require('hbs');
+const api = require('./api');
 
 const baseUrl = '${config.protocol}://${config.hostname}:${config.port}';
 
@@ -20,23 +20,25 @@ app.use(cors());
 app.set('config', config);
 
 // Utiliser body-parser pour lire les données envoyées dans les requêtes POST
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+//app.use(bodyParser.urlencoded({ extended: true }));
 
 // Templating
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, '../views'));
 hbs.registerPartials(path.join(__dirname, '../components'));
 app.locals = {
+  ...app.locals,
   baseUrl: baseUrl
 };
 
 // Frontend router
 app.use('/', front_router);
+app.use('/api', api);
 
 // Configuration du serveur
 let opts = {};
-if (config.https.key && config.https.cert) {
+if (config.https) {
   opts = {
     key: fs.readFileSync(config.https.key),
     cert: fs.readFileSync(config.https.cert)

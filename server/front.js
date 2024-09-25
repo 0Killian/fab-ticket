@@ -22,4 +22,8 @@ router.get('/borrows', auth.isAuthenticated, (req, res) => {
 
 router.use('/admin', auth.isAuthenticated, auth.isAdmin, adminRouter);
 
+router.get('/login', (req, res) => {
+  res.render('login', {title: "Login"});
+});
+
 module.exports = router;

@@ -35,10 +35,10 @@ module.exports = {
     opts: { url: 'ldap://localhost:389' },
 
     // LDAP query to get the user. You can use #[[username]] to fill in the username passed in the login form
-    userDnQuery: 'cn=#[[username]],dc=exemple,dc=com',
+    userDnQuery: 'cn=#[[username]],dc=mydil-nantes,dc=fr',
 
     // Where to search for groups
-    groupsSearchBase: 'ou=groups,dc=exemple,dc=com',
+    groupsSearchBase: 'ou=groups,dc=mydil-nantes,dc=fr',
 
     // Attribute used to get the groups on the user
     groupClass: 'groupOfUniqueNames',
