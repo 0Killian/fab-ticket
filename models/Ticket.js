@@ -27,18 +27,19 @@ const Ticket = sequelize.define('Ticket', {
   creationDate: {
     type: DataTypes.DATE,
   },
-  userId: {
-    type: DataTypes.INTEGER,
+  author: {
+    type: DataTypes.STRING(100),
+    allowNull: false,
   },
 }, {
   tableName: 'ticket',
   timestamps: false,
   hooks: {
     beforeUpdate: (ticket, options) => {
-      if (ticket.status === 2 && ticket.previous('status') !==1) {
+      if (ticket.status === 2 && ticket.previous('status') !== 1) {
         throw new Error("Ticket can only be closed if it's in progress");
       } 
-      if (ticket.status === 1 && ticket.previous('status') !== 0){
+      if (ticket.status === 1 && ticket.previous('status') !== 0) {
         throw new Error("Ticket can only be set to 'in progress' (status 1) if it's in 'default' (status 0)");
       }
     }

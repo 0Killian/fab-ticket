@@ -15,8 +15,52 @@ router.get('/ticket/create', ticketController.createTicket, (req, res) => {
 });
 
 // list all ticket
-router.get('/tickets',(req, res) => {
-    res.render('tickets', {layout: 'main', title: 'Liste des Tickets' });
+router.get('/tickets', async (req, res) => {
+    const config = req.app.get('config');
+    let page = req.query.page || 1;
+    let limit = 10;
+    let offset = (page - 1) * limit;
+
+    let tickets = await Ticket.findAll({
+        limit: limit,
+        offset: offset
+    });
+
+    let next = await Ticket.count({
+        offset: offset + limit
+    }) > 0;
+
+    let previous = page > 1;
+    tickets = await Promise.all(tickets
+        .map(ticket => ticket.dataValues)
+        .map(async ticket => {
+            let author = await auth.getUser(config, ticket.author);
+            return {
+                ...ticket,
+                description: ticket.description.substring(0, 20) + (ticket.description.length > 20 ? '...' : ''),
+                author: author.givenName + " " + author.sn
+            }
+        })
+        .map(async t => {
+            let ticket = await t;
+            
+            if (ticket.status === 0) {
+                ticket.status = "Ouvert";
+                ticket.statusClasses = "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
+            } else if (ticket.status === 1) {
+                ticket.status = "En cours";
+                ticket.statusClasses = "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300";
+            } else if (ticket.status === 2) {
+                ticket.status = "Fermé";
+                ticket.statusClasses = "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
+            }
+
+            return ticket;
+        }));
+
+    console.log(tickets);
+
+    res.render('tickets', { layout: 'main', title: 'Liste des Tickets', tickets, page, next, previous });
 });
 
 // select 1 tickt
@@ -69,52 +113,52 @@ router.get('/login', (req, res) => {
 });
 
 adminRouter.get('/dashboard', async (req, res) => {
-  let opened_tickets_count = await Ticket.count({
-    where: { status: 0 }
-  });
+    let opened_tickets_count = await Ticket.count({
+        where: { status: 0 }
+    });
 
-  let ongoing_borrows_count = await Borrow.count({
-    where: { endDate: { [Op.gt]: new Date() } } // Use endDate instead of end_date
-  });
+    let ongoing_borrows_count = await Borrow.count({
+        where: { endDate: { [Op.gt]: new Date() } } // Use endDate instead of end_date
+    });
 
-  let created_tickets_count = await Ticket.count({
-    where: {
-      creationDate: {
-        [Op.gt]: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-      }
-    }
-  });
-
-  let closed_tickets_count = await Ticket.count({
-    where: {
-        status: 2,
-        creationDate: { 
-            [Op.gt]: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    let created_tickets_count = await Ticket.count({
+        where: {
+            creationDate: {
+                [Op.gt]: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+            }
         }
-    }
-  });
+    });
 
-  let items_count = await Material.count();
-  res.render('dashboard', { layout: 'main', title: 'Dashboard', opened_tickets_count, ongoing_borrows_count, items_count, created_tickets_count, closed_tickets_count });
+    let closed_tickets_count = await Ticket.count({
+        where: {
+            status: 2,
+            creationDate: {
+                [Op.gt]: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+            }
+        }
+    });
+
+    let items_count = await Material.count();
+    res.render('dashboard', { layout: 'main', title: 'Dashboard', opened_tickets_count, ongoing_borrows_count, items_count, created_tickets_count, closed_tickets_count });
 });
 
 adminRouter.get('/inventory', (req, res) => {
-  res.render('inventory', {layout: 'main', title: 'Inventaire' });
+    res.render('inventory', {layout: 'main', title: 'Inventaire' });
 });
 
 
 router.get('/tickets', (req, res) => {
-  res.render('tickets', {layout: 'main', title: 'Tickets'});
+    res.render('tickets', {layout: 'main', title: 'Tickets'});
 });
 
 router.get('/borrows', auth.isAuthenticated, (req, res) => {
-  res.render('borrows', {layout: 'main', title: 'Emprunts'});
+    res.render('borrows', {layout: 'main', title: 'Emprunts'});
 });
 
 router.use('/admin', adminRouter);
 
 router.get('/login', (req, res) => {
-  res.render('login', {title: "Login"});
+    res.render('login', {title: "Login"});
 });
 
 module.exports = router;
