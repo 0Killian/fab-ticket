@@ -1,19 +1,85 @@
-version: '3.1'
+version: '3.8'
 
 services:
-  db:
-    image: mysql
+  devcontainer:
+   build: 
+     context: .
+     dockerfile: Dockerfile
+   volumes:
+     - ./:/opt/fab-ticket:cached      
+   network_mode: service:database
+   depends_on:
+     - database
+     - openldap
+
+  openldap:
+    image: osixia/openldap:latest
+    container_name: openldap
+    environment:
+      LDAP_LOG_LEVEL: "256"
+      LDAP_ORGANISATION: "Mydil-nantes"
+      LDAP_DOMAIN: "mydil-nantes.fr"
+      LDAP_BASE_DN: "dc=mydil-nantes,dc=fr"
+      LDAP_ADMIN_PASSWORD: "root"
+      LDAP_CONFIG_PASSWORD: "root"
+      LDAP_READONLY_USER: "false"
+      LDAP_READONLY_USER_USERNAME: "readonly"
+      LDAP_READONLY_USER_PASSWORD: "readonly"
+      LDAP_RFC2307BIS_SCHEMA: "false"
+      LDAP_BACKEND: "mdb"
+      LDAP_TLS: "true"
+      LDAP_TLS_CRT_FILENAME: "ldap.crt"
+      LDAP_TLS_KEY_FILENAME: "ldap.key"
+      LDAP_TLS_CA_CRT_FILENAME: "ca.crt"
+      LDAP_TLS_ENFORCE: "false"
+      LDAP_TLS_CIPHER_SUITE: "SECURE256:-VERS-SSL3.0"
+      LDAP_TLS_PROTOCOL_MIN: "3.1"
+      LDAP_TLS_VERIFY_CLIENT: "demand"
+      LDAP_REPLICATION: "false"
+      KEEP_EXISTING_CONFIG: "false"
+      LDAP_REMOVE_CONFIG_AFTER_SETUP: "true"
+      LDAP_SSL_HELPER_PREFIX: "ldap"
+    tty: true
+    stdin_open: true
+    volumes:
+      - ldap:/var/lib/ldap
+      - slapd:/etc/ldap/slapd.d
+      - certs:/container/service/slapd/assets/certs/
+    ports:
+      - "389:389"
+      - "636:636"
+    domainname: "mydil-nantes.fr" # important: same as hostname
+    hostname: "mydil-nantes.fr"
+
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: "openldap"
+      PHPLDAPADMIN_HTTPS: "false"
+    ports:
+      - "8080:80"
+    depends_on:
+      - openldap
+
+  database:
+    image: 'mariadb:latest'
+    container_name: database
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: fabticket
-      MYSQL_USER: fabticket
-      MYSQL_PASSWORD: fabticket2024
+      - MYSQL_USER=fabticket
+      - MYSQL_PASSWORD=fabticket2024
+      - MYSQL_DATABASE=fabticket
+      - MYSQL_ROOT_PASSWORD=fabticket2024
     ports:
-      - '3306:3306'
+      - '20:3306'
     volumes:
-      - fabticket-db:/var/lib/mysql
+      - ${PWD}/mariadb/:/var/lib/mysql/
 
 volumes:
-  fabticket-db:
+  slapd:
+    driver: local
+  ldap:
+    driver: local
+  certs:
     driver: local

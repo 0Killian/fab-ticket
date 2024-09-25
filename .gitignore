@@ -132,3 +132,5 @@ dist
 mariadb/
 config.js
 
+mariadb/
+public/css/tailwind.css
