@@ -11,8 +11,7 @@ const front_router = require('./front');
 const path = require('path');
 const hbs = require('hbs');
 
-const baseUrl = '${config.protocol}://${config.hostname}:${config.port}';
-
+const baseUrl = `${config.protocol}://${config.hostname}:${config.port}`;
 
 // Serve static assets (CSS, images, JS) from the "public" directory
 app.use(express.static(path.join(__dirname, '../public')));
@@ -34,6 +33,7 @@ app.set('views', path.join(__dirname, '../views'));
 // Register Handlebars partials
 hbs.registerPartials(path.join(__dirname, '../views/partials'));
 app.locals = {
+  ...app.locals,
   baseUrl: baseUrl
 };
 
@@ -42,7 +42,7 @@ app.use('/', front_router);
 
 // Configuration du serveur
 let opts = {};
-if (config.https.key && config.https.cert) {
+if (config.https) {
   opts = {
     key: fs.readFileSync(config.https.key),
     cert: fs.readFileSync(config.https.cert)

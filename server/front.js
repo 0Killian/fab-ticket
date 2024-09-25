@@ -16,7 +16,7 @@ adminRouter.get('/inventory', (req, res) => {
 });
 
 
-router.get('/tickets', auth.isAuthenticated, (req, res) => {
+router.get('/tickets', (req, res) => {
   res.render('tickets', {layout: 'main', title: 'Tickets'});
 });
 
@@ -24,7 +24,7 @@ router.get('/borrows', auth.isAuthenticated, (req, res) => {
   res.render('borrows', {layout: 'main', title: 'Emprunts'});
 });
 
-router.use('/admin', auth.isAuthenticated, auth.isAdmin, adminRouter);
+router.use('/admin', adminRouter);
 
 module.exports = router;
 
