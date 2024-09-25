@@ -20,7 +20,7 @@ const getBorrowById = async (req,res) => {
         if(!selectedBorrow){
             const msg = " borrow not found"
             console;log(msg)
-            res.statut(404, msg)
+            res.status(404, msg)
         }
 
         res.status(200)
@@ -39,7 +39,7 @@ const updateBorrow = async(res, req) =>{
         if(!modifyBorrow){
             const msg = " Borrow not found"
             console;log(msg)
-            res.statut(404, msg)
+            res.status(404, msg)
         }
 
         modifyBorrow.startDate = startDate   || modifyBorrow.startDate 

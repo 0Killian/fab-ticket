@@ -19,7 +19,7 @@ const getCategoryById = async (req,res) => {
         if(!selectedCategory){
             const msg = " Category not found"
             console;log(msg)
-            res.statut(404, msg)
+            res.status(404, msg)
         }
 
         res.status(200)
@@ -38,7 +38,7 @@ const updateCategory = async(res, req) =>{
         if(!modifyCategory){
             const msg = " Category not found"
             console;log(msg)
-            res.statut(404, msg)
+            res.status(404, msg)
         }
 
         modifyCategory.name   || modifyCategory.name 

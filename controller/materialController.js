@@ -21,7 +21,7 @@ const getMaterialById = async (req,res) => {
         if(!selectedMaterial){
             const msg = " material not found"
             console;log(msg)
-            res.statut(404, msg)
+            res.status(404, msg)
         }
 
         res.status(200)
@@ -39,7 +39,7 @@ const updateMaterial = async(res, req) =>{
         if(!modifyMaterial){
             const msg = " material not found"
             console;log(msg)
-            res.statut(404, msg)
+            res.status(404, msg)
         }
 
         modifyMaterial.inventoryId = inventoryId  || modifyMaterial.inventoryId  
@@ -124,7 +124,7 @@ const getConditionById = async (req,res) => {
         if(!selectedCondition){
             const msg = " condition not found"
             console;log(msg)
-            res.statut(404, msg)
+            res.status(404, msg)
         }
 
         res.status(200)
@@ -143,7 +143,7 @@ const updateCondition = async(res, req) =>{
         if(!modifyCondition){
             const msg = " condition not found"
             console;log(msg)
-            res.statut(404, msg)
+            res.status(404, msg)
         }
 
         modifyCondition.name = inventoryId  || modifyCondition.name

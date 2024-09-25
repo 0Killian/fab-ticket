@@ -20,7 +20,7 @@ const getTicketById = async (req,res) => {
         if(!modifyTicket){
             const msg = " Ticket not found"
             console;log(msg)
-            res.statut(404, msg)
+            res.status(404, msg)
         }
 
         res.status(200)
@@ -38,7 +38,7 @@ const updateTicket = async(res, req) =>{
         if(!modifyTicket){
             const msg = " Ticket not found"
             console;log(msg)
-            res.statut(404, msg)
+            res.status(404, msg)
         }
 
         modifyTicket.status = status || modifyTicket.status 
