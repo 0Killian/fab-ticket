@@ -1,30 +1,32 @@
-const borrow = require("../models/Borrow")
+const { Borrow } = require("../models/index")
 
 
 const getAllBorrow = async (req,res) => {
     try {
-        const borrows = await borrow.findAll();
-        console.log(borrows);
-        res.status(200).json(borrows);
+        const borrows = await Borrow.findAll();
+        res.status(200).json(borrows.map(borrow => {
+            return borrow.dataValues;
+        }));
     } catch (error) {
-        console.error("Failed to get borrows:", error)
-        res.status(500);
+        console.error("Failed to get borrows:", error);
+        res.status(500).end();
     }
 }
 
-const getBorrowById = async (req,res) => {
+const getBorrowById = async (req, res) => {
     try {
         const id = req.params.id;
-        const selectedBorrow = await borrow.findByPk(id);
+        const selectedBorrow = await Borrow.findByPk(id);
+
         if(!selectedBorrow) {
-            console.log("borrow not found");
-            res.statut(404);
+            console.log("Borrow not found:", id);
+            res.status(404).end();
         }
 
-        res.status(200).json(selectedBorrow);
+        res.status(200).json(selectedBorrow.dataValues);
     } catch (error) {
         console.error("Failed to get borrow:", error);
-        res.status(500);
+        res.status(500).end();
     }
 }
 
@@ -32,28 +34,33 @@ const getBorrowById = async (req,res) => {
 const updateBorrow = async (req, res) =>{
     try {
         const id = req.params.id;
-        const modifyBorrow = await borrow.findByPk(id);
+        const modifyBorrow = await Borrow.findByPk(id);
 
-        const { startDate, endDate, userId, materialId, commentary } = req.body;
+        const { startDate, endDate, userId, materialId, description } = req.body;
+
+        if (startDate === undefined || endDate === undefined || userId === undefined || materialId === undefined || description === undefined) {
+            console.log("Missing parameters");
+            res.status(400).end();
+        }
 
         if(!modifyBorrow) {
-            console.log("borrow not found");
-            res.statut(404);
+            console.log("Borrow not found:", id);
+            res.status(404).end();
         }
 
         modifyBorrow.startDate = startDate || modifyBorrow.startDate;
         modifyBorrow.endDate = endDate || modifyBorrow.endDate;
         modifyBorrow.userId = userId || modifyBorrow.userId;
         modifyBorrow.materialId = materialId || modifyBorrow.materialId;
-        modifyBorrow.description = commentary || modifyBorrow.commentary;
+        modifyBorrow.description = description || modifyBorrow.description;
 
         await modifyBorrow.save();
-        console.log('update is successfull');
+        console.log("Updated borrow " + id + " successfully");
 
-        res.status(200);
+        res.status(200).end();
     } catch (error) {
         console.error("Failed to update a borrow: ", error)
-        res.status(500);
+        res.status(500).end();
     }
 }
 
@@ -61,17 +68,17 @@ const createBorrow = async (req, res) => {
     const { startDate, endDate, userId, materialId, commentary } = req.body;
 
     if( startDate === undefined || endDate === undefined || userId === undefined || !materialId === undefined|| commentary === undefined ){
-        console.error("error not found");
-        res.status(404);
+        console.error("Missing parameters");
+        res.status(400).end();
     }
 
     try {
-        const newBorrow = borrow.create({ startDate, endDate, userId, materialId, commentary });
-        console.log("New borrow was created: ", newBorrow);
-        res.status(200);
+        const newBorrow = Borrow.create({ startDate, endDate, userId, materialId, commentary });
+        console.log("Created new borrow: ", newBorrow.dataValues);
+        res.status(200).end();
     } catch (error) {
         console.error("Failed to create a borrow:", error);
-        res.status(500);
+        res.status(500).end();
     }     
 }
 
@@ -79,16 +86,16 @@ const deleteBorrowById = async (req, res) => {
     const id = req.params.id;
 
     try {
-        const deleteBorrow = await borrow.destroy({
+        await borrow.destroy({
             where: {
-                id: deleteBorrow.id
+                id: id
             }
         });
-        console.log("Deleted borrow", deleteBorrow.id);
-        res.status(200);
+        console.log("Deleted borrow ", id);
+        res.status(200).end();
     } catch (error) {
         console.error("Failed to delete borrow");
-        res.status(500);
+        res.status(500).end();
     }
 }
 
