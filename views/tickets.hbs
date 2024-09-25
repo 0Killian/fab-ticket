@@ -1,6 +1,6 @@
       <!-- Content -->
         <div class="flex p-6 w-full">
-                <div class="bg-white rounded-md border border-gray-100 w-full p-6 shadow-md shadow-black/5">
+                <div class="bg-white rounded-md border border-gray-100 w-full p-6 shadow-md shadow-black/5 dark:bg-gray-900 dark:border-gray-800">
                     <div class="relative overflow-x-auto sm:rounded-lg">
                         <div class="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4 bg-white dark:bg-gray-900">
                             <div>
@@ -33,8 +33,8 @@
                                 <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                                 Ajouter
                             </button>
-                            <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" type="button">
-                            <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"></path></svg>
+                            <button class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" type="button">
+                                <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"></path></svg>
                                 Exporter
                             </button>
                             </div>
@@ -44,7 +44,7 @@
                                 <tr>
                                     <th scope="col" class="p-4">
                                         <div class="flex items-center">
-                                            <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <input id="checkAll" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                             <label for="checkbox-all-search" class="sr-only">checkbox</label>
                                         </div>
                                     </th>
@@ -55,7 +55,13 @@
                                         Description
                                     </th>
                                     <th scope="col" class="px-6 py-3">
+                                        Utilisateur
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
                                         Status
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Date
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Actions
@@ -66,7 +72,7 @@
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td class="w-4 p-4">
                                         <div class="flex items-center">
-                                            <input id="checkbox-table-search-2" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <input id="checkbox-table-search-2" type="checkbox" class="checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                             <label for="checkbox-table-search-2" class="sr-only">checkbox</label>
                                         </div>
                                     </td>
@@ -76,19 +82,25 @@
                                         </div>
                                     </th>
                                     <td class="px-6 py-4">
-                                        L'écran de mon ordinateur est noir
+                                        L'écran de mon ...
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-base font-semibold">Solange Martin</div>
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center">
                                             <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Ouvert</span>
                                         </div>
                                     </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-base font-semibold">15/11/2024</div>
+                                    </td>
                                     <td class="px-6 py-4 flex space-x-2">
                                         <!-- Modal toggle -->
-                                        <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                                        Modifier
+                                        <button data-modal-target="select-modal" data-modal-toggle="select-modal" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white" type="button">
+                                            Modifier
                                         </button>
-                                        <button data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                        <button data-modal-hide="popup-modal" type="button" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white">
                                             Supprimer
                                         </button>
                                     </td>
@@ -96,66 +108,78 @@
                                 <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td class="w-4 p-4">
                                         <div class="flex items-center">
-                                            <input id="checkbox-table-search-3" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <input id="checkbox-table-search-3" type="checkbox" class="checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                             <label for="checkbox-table-search-3" class="sr-only">checkbox</label>
                                         </div>
                                     </td>
                                     <th scope="row" class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <div class="ps-3">
-                                            <div class="text-base font-semibold">Imprimante qui ne fonctionne pas</div>
+                                            <div class="text-base font-semibold">Imprimante qui ...</div>
                                         </div>
                                     </th>
                                     <td class="px-6 py-4">
                                         J'ai un problème avec...
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-base font-semibold">Solange Martin</div>
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center">
                                             <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Fermé</span>
                                         </div>
                                     </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-base font-semibold">15/12/2023</div>
+                                    </td>
                                     <td class="px-6 py-4 flex space-x-2">
                                         <!-- Modal toggle -->
-                                        <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                        <button data-modal-target="select-modal" data-modal-toggle="select-modal" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white" type="button">
                                             Modifier
                                         </button>
-                                        <button data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                        <button data-modal-hide="popup-modal" type="button" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white">
                                             Supprimer
                                         </button>
                                     </td>
                                 </tr>
-                                                                <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"></tr>
+                                <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td class="w-4 p-4">
                                         <div class="flex items-center">
-                                            <input id="checkbox-table-search-3" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <input id="checkbox-table-search-3" type="checkbox" class="checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                             <label for="checkbox-table-search-3" class="sr-only">checkbox</label>
                                         </div>
                                     </td>
                                     <th scope="row" class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <div class="ps-3">
-                                            <div class="text-base font-semibold">Imprimante qui ne fonctionne pas</div>
+                                            <div class="text-base font-semibold">Imprimante qui ...</div>
                                         </div>
                                     </th>
                                     <td class="px-6 py-4">
                                         J'ai un problème avec...
                                     </td>
                                     <td class="px-6 py-4">
+                                        <div class="text-base font-semibold">Solange Martin</div>
+                                    </td>
+                                    <td class="px-6 py-4">
                                         <div class="flex items-center">
                                             <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">En cours</span>
                                         </div>
                                     </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-base font-semibold">14/09/2024</div>
+                                    </td>
                                     <td class="px-6 py-4 flex space-x-2">
                                         <!-- Modal toggle -->
-                                        <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                        <button data-modal-target="select-modal" data-modal-toggle="select-modal" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white" type="button">
                                             Modifier
                                         </button>
-                                        <button data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                        <button data-modal-hide="popup-modal" type="button" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white">
                                             Supprimer
                                         </button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <!-- Main modal -->
+                        <!-- Add modal -->
                         <div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                             <div class="relative p-4 w-full max-w-md max-h-full">
                                 <!-- Modal content -->
@@ -176,26 +200,12 @@
                                     <form class="p-4 md:p-5">
                                         <div class="grid gap-4 mb-4 grid-cols-2">
                                             <div class="col-span-2">
-                                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                                                <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
-                                            </div>
-                                            <div class="col-span-2 sm:col-span-1">
-                                                <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price</label>
-                                                <input type="number" name="price" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="$2999" required="">
-                                            </div>
-                                            <div class="col-span-2 sm:col-span-1">
-                                                <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
-                                                <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <option selected="">Select category</option>
-                                                    <option value="TV">TV/Monitors</option>
-                                                    <option value="PC">PC</option>
-                                                    <option value="GA">Gaming/Console</option>
-                                                    <option value="PH">Phones</option>
-                                                </select>
+                                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titre</label>
+                                                <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Titre du ticket" required="">
                                             </div>
                                             <div class="col-span-2">
                                                 <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                                                <textarea id="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write product description here"></textarea>                    
+                                                <textarea id="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Écrivez la description du billet ici"></textarea>                    
                                             </div>
                                         </div>
                                         <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -205,8 +215,57 @@
                                     </form>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Edit Modal -->
+                        <div id="select-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            <div class="relative p-4 w-full max-w-md max-h-full">
+                                <!-- Modal content -->
+                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                    <!-- Modal header -->
+                                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            Modifier un ticket
+                                        </h3>
+                                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="select-modal">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                            </svg>
+                                            <span class="sr-only">Fermer modal</span>
+                                        </button>
+                                    </div>
+                                    <!-- Modal body -->
+                                    <form class="p-4 md:p-5">
+                                        <div class="grid gap-4 mb-4 grid-cols-2">
+                                            <div class="col-span-2">
+                                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titre</label>
+                                                <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Titre du ticket" required="">
+                                            </div>
+                                            <div class="col-span-2">
+                                                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                                                <textarea id="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Écrivez la description du billet ici"></textarea>                    
+                                            </div>
+                                            <div class="col-span-2">
+                                                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date</label>
+                                                <div class="relative max-w-sm">
+                                                <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                                    </svg>
+                                                </div>
+                                                <input datepicker id="default-datepicker" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                            Modifier le ticket
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div> 
                     </div>
+                    <br>
                     <div class="flex flex-col items-center">
                         <!-- Help text -->
                         <span class="text-sm text-gray-700 dark:text-gray-400">
@@ -229,5 +288,45 @@
                         </div>
                     </div>
                 </div>
-                
         </div>
+        <script>
+            // Ensure DOM is loaded before running the script
+            document.addEventListener("DOMContentLoaded", function() {
+                // Get the "check all" checkbox from the thead
+                const checkAllBox = document.getElementById("checkAll");
+
+                // Check if the "checkAll" checkbox exists
+                if (!checkAllBox) {
+                console.error("Master checkbox with ID 'checkAll' not found.");
+                return;
+                }
+
+                // Get all checkboxes in the tbody
+                const checkboxes = document.querySelectorAll("tbody .checkbox");
+
+                // Add event listener to the "check all" checkbox
+                checkAllBox.addEventListener("change", function() {
+                // Loop through all checkboxes and set their checked state to match the "check all" checkbox
+                checkboxes.forEach(function(checkbox) {
+                    checkbox.checked = checkAllBox.checked;
+                });
+                });
+
+                // Add event listeners to individual checkboxes
+                checkboxes.forEach(function(checkbox) {
+                checkbox.addEventListener("change", function() {
+                    // If one checkbox is unchecked, uncheck the "check all" checkbox
+                    if (!this.checked) {
+                    checkAllBox.checked = false;
+                    } else {
+                    // If all checkboxes are checked, also check the "check all" checkbox
+                    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                    if (allChecked) {
+                        checkAllBox.checked = true;
+                    }
+                    }
+                });
+                });
+            });
+            </script>
+
