@@ -12,7 +12,6 @@ const getAllBorrow = async (req,res) => {
     }
 }
 
-
 const getBorrowById = async (req,res) => {
     try {
         const id = req.params.id;
@@ -30,7 +29,7 @@ const getBorrowById = async (req,res) => {
 }
 
 
-const updateBorrow = async (res, req) =>{
+const updateBorrow = async (req, res) =>{
     try {
         const id = req.params.id;
         const modifyBorrow = await borrow.findByPk(id);
@@ -58,10 +57,10 @@ const updateBorrow = async (res, req) =>{
     }
 }
 
-const createBorrow = async (res, req) => {
+const createBorrow = async (req, res) => {
     const { startDate, endDate, userId, materialId, commentary } = req.body;
 
-    if( !startDate || !endDate ||  !userId || !materialId || !commentary ) {
+    if( startDate === undefined || endDate === undefined || userId === undefined || !materialId === undefined|| commentary === undefined ){
         console.error("error not found");
         res.status(404);
     }
@@ -76,7 +75,7 @@ const createBorrow = async (res, req) => {
     }     
 }
 
-const deleteBorrowById = async (res, req) => {
+const deleteBorrowById = async (req, res) => {
     const id = req.params.id;
 
     try {
