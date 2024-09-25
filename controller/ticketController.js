@@ -37,8 +37,8 @@ const updateTicket = async(req, res) => {
         let { status, title, description } = req.body;
 
         if( status === undefined || title === undefined || description === undefined) {
-            console.error("data missing");
-            res.status(404).end();
+            console.error("Missing parameters");
+            res.status(400).end();
         }
 
         const modifyTicket = await Ticket.findByPk(id);
