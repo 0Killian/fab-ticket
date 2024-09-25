@@ -1,31 +1,43 @@
 const Ticket = require("../models/Ticket")
 
 
-const getAllTicket = async (req,res) => {
+const getAllTicket = async (req, res) => {
+    let { start, end } = req.query;
+
     try {
-        const ticket = await Ticket.findAll();
-        res.status(200).json(ticket);
+        if (start === undefined || end === undefined) {
+            const ticket = await Ticket.findAll();
+            res.status(200).json(ticket);
+        } else {
+            const ticket = await Ticket.findAll({
+                where: {
+                    creationDate: {
+                        [Op.between]: [start, end]
+                    }
+                }
+            });
+            res.status(200).json(ticket);
+        }
     } catch (error) {
-        console.error("error to get user:", error)
+        console.error("Failed to get tickets:", error)
         res.status(500);
     }
 }
 
-const getTicketById = async (req,res) => {
+const getTicketById = async (req, res) => {
     try {
         const id = req.params.id;
-        const modifyTicket = await Ticket.findByPk(id)
+        const ticket = await Ticket.findByPk(id);
 
-        if(!modifyTicket){
-            const msg = " Ticket not found"
-            console;log(msg)
-            res.status(404, msg)
+        if (!ticket) {
+            console.log("Ticket not found");
+            res.status(404);
         }
 
-        res.status(200).json(`find id: ${id}`)
+        res.status(200).json(ticket);
     } catch (error) {
-        console.error("Ticket not found:", error)
-        res.status(404).json("Ticket not found:", error)
+        console.error("Ticket not found:", error);
+        res.status(404);
     }
 }
 
