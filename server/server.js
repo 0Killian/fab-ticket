@@ -9,6 +9,8 @@ const front_router = require('./front');
 const path = require('path');
 const hbs = require('hbs');
 const api = require('./api');
+const fs = require('fs');
+
 
 const baseUrl = `${config.protocol}://${config.hostname}:${config.port}`;
 
@@ -47,6 +49,19 @@ if (config.https) {
     cert: fs.readFileSync(config.https.cert)
   };
 }
+
+// Error handling middleware for 404
+app.use((req, res, next) => {
+  res.status(404);
+  res.render('errors/404');
+});
+
+// Error handling middleware for 500
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500);
+  res.render('errors/500'); 
+});
 
 const server = http.createServer(opts, app);
 
