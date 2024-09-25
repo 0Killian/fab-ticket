@@ -133,3 +133,5 @@ dist
 config.js
 build/
 
+public/css/tailwind.css
+
