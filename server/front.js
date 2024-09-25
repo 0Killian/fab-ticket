@@ -1,9 +1,8 @@
 const auth = require('./auth');
 let router = require('express').Router();
-const ticketController= require("../models/Ticket");
-const burrowController= require("../models/Burrow");
-const materialController= require("../models/Material");
-
+const ticketController = require("../controller/ticketController");
+const borrowController = require("../controller/borrowController");
+const materialController = require("../controller/materialController");
 
 
 // create ticket
@@ -21,23 +20,28 @@ router.get('/ticket/:id', ticketController.getTicketById, (req, res) => {
     res.render('ticketDetails', { title: 'Détails du Ticket', ticketId: req.params.id });
 });
 
+/**
+ *  BORROW
+ */
 
-
-// create burrow
-router.get('/burrows/create', burrowController.createBurrow, (req, res) => {
-    res.render('createBurrows', { title: 'Créer un Ticket' });
+// create borrow
+router.get('/borrows/create', borrowController.createBorrow, (req, res) => {
+    res.render('createBorrows', { title: 'Créer un Ticket' });
 });
 
-// list all burrows
-router.get('/burrows', burrowController.getAllBurrow ,(req, res) => {
-    res.render('burrows', { title: 'Liste des Tickets' });
+// list all borrows
+router.get('/borrows', borrowController.getAllBurrow ,(req, res) => {
+    res.render('borrows', { title: 'Liste des Tickets' });
 });
 
 // select 1 tiquet
-router.get('/burrows/:id', (req, res) => {
-    res.render('burrowsDetails', { title: 'Détails du Ticket', ticketId: req.params.id });
+router.get('/borrows/:id', borrowController.getBorrowById, (req, res) => {
+    res.render('borrowsDetails', { title: 'Détails du Ticket', ticketId: req.params.id });
 });
 
+/**
+ * material
+ */
 
 // create material
 router.get('/material/create', materialController.createMaterial, (req, res) => {
