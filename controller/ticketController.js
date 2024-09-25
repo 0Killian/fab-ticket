@@ -3,7 +3,11 @@ const { Ticket } = require("../models/index")
 const getAllTicket = async (req, res) => {
     try {
         const ticket = await Ticket.findAll();
-        res.status(200).json(ticket);
+        res.status(200).json(ticket
+            .map(ticket => {
+                return ticket.dataValues
+            })
+        );
     } catch (error) {
         console.error("Failed to get tickets:", error)
         res.status(500).end();
@@ -20,7 +24,7 @@ const getTicketById = async (req, res) => {
             res.status(404).end();
         }
 
-        res.status(200).json(ticket);
+        res.status(200).json(ticket.dataValues);
     } catch (error) {
         console.error("Ticket not found:", error);
         res.status(404).end();
