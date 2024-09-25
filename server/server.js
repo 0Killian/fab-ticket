@@ -2,14 +2,13 @@
 const express = require('express');
 const app = express();
 const http = require('http');
-const ldap = require('ldapjs');
-const bodyParser = require('body-parser');  // Parse POST requests with JSON body
 const config = require('../config');
 const sequelize = require('./sequelize/database');
 const cors = require('cors');
 const front_router = require('./front');
 const path = require('path');
 const hbs = require('hbs');
+const api = require('./api');
 
 const baseUrl = `${config.protocol}://${config.hostname}:${config.port}`;
 
@@ -22,9 +21,8 @@ app.use(cors());
 // App context
 app.set('config', config);
 
-// Use body-parser to read POST request data
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// Utiliser body-parser pour lire les données envoyées dans les requêtes POST
+app.use(express.json());
 
 // Templating
 app.set('view engine', 'hbs');
@@ -39,6 +37,7 @@ app.locals = {
 
 // Frontend router
 app.use('/', front_router);
+app.use('/api', api);
 
 // Configuration du serveur
 let opts = {};

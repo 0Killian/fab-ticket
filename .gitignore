@@ -133,5 +133,5 @@ dist
 config.js
 build/
 
+mariadb/
 public/css/tailwind.css
-
