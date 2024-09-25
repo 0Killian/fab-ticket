@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router();
 const ticketController = require("../controller/ticketController");
 
+
 /**
  * ticket CRUD
  */
@@ -22,4 +23,4 @@ router.post("/emprunt", BurrowController.createBurrow);
 router.put("/emprunt", BurrowController.updateBurrow);
 router.delete("/emprunt", BurrowController.deleteBurrowById);
 
-module.exports = Router
+module.exports = router
