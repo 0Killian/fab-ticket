@@ -11,7 +11,6 @@ const getAllTicket = async (req,res) => {
     }
 }
 
-
 const getTicketById = async (req,res) => {
     try {
         const id = req.params.id;
@@ -20,42 +19,41 @@ const getTicketById = async (req,res) => {
         if(!modifyTicket){
             const msg = " Ticket not found"
             console;log(msg)
-            res.statut(404, msg)
+            res.status(404, msg)
         }
 
-        res.status(200)
+        res.status(200).json(`find id: ${id}`)
     } catch (error) {
         console.error("Ticket not found:", error)
-        res.status(404)
+        res.status(404).json("Ticket not found:", error)
     }
 }
 
-const updateTicket = async(res, req) =>{
+const updateTicket = async(req, res) =>{
     try {
         const id = req.params.id;
         const modifyTicket = await Ticket.findByPk(id);
 
         if(!modifyTicket){
-            const msg = " Ticket not found"
+            const msg = "Ticket not found"
             console;log(msg)
-            res.statut(404, msg)
+            res.status(404, msg)
         }
 
-        modifyTicket.status = status || modifyTicket.status 
-        modifyTicket.title = title  || modifyTicket.Title
-        modifyTicket.description = description  || modifyTicket.description
+        modifyTicket.status = req.body.status || modifyTicket.status 
+        modifyTicket.title = req.bodytitle  || modifyTicket.Title
+        modifyTicket.description = req.body.description  || modifyTicket.description
         
         await modifyTicket.save();
         console.log('update is successfull');
 
-        res.status(200)
+        res.status(200).json("update successfull")
         
     } catch (error) {
         console.error("Ticket not found:", error)
-        res.status(404)
+        res.status(404).json("Ticket not found:", error)
     }
 }
-
 
 const createTicket = async (req, res) => {
     const { status, title, description } = req.body;
@@ -71,7 +69,7 @@ const createTicket = async (req, res) => {
         res.status(200).end();
     } catch (error) {
         console.error("Ticket not found")
-        res.status(404)
+        res.status(404).json("Ticket not found")
     }     
 }
 
@@ -85,11 +83,11 @@ const deleteTicketById = async (res, req) => {
                 id: deleteTicket.id
             }
         })
-        console.log(`Ticket ${deleteTicket.id}`);
-        res.status(200);
+        console.log(`Ticket ${id}`);
+        res.status(200).json(`Ticket ${id} is deleted`);
     } catch (error) {
         console.error("Ticket not found")
-        res.status(404)
+        res.status(404).json("Ticket not found")
     }
 }
 
