@@ -6,6 +6,7 @@ const materialController = require("../controller/materialController");
 const { Op } = require('sequelize');
 const { Parser } = require('json2csv');
 const moment = require('moment');
+const search = require('./search');
 
 
 const { Ticket, Borrow, Material } = require('../models');
@@ -22,22 +23,27 @@ router.get('/tickets', auth.isAuthenticated, async (req, res) => {
     let limit = 10;
     let offset = (page - 1) * limit;
 
-    let tickets = await Ticket.findAll({
-        limit: limit,
-        offset: offset
-    });
-
     let next = (await Ticket.count()) > offset + limit;
 
     let previous = page > 1;
+    let tickets = [];
+    if (req.query.search) {
+        tickets = await search(config, 'ticket', req.query.search, limit, offset);
+    } else {
+        tickets = await search(config, 'ticket', "status:open status:ongoing", limit, offset);
+        req.query.search = "status:open status:ongoing";
+    }
+
     tickets = await Promise.all(tickets
         .map(ticket => ticket.dataValues)
+        .sort((a, b) => b.creationDate - a.creationDate)
         .map(async ticket => {
             let author = await auth.getUser(config, ticket.author);
             return {
                 ...ticket,
                 description: ticket.description.substring(0, 20) + (ticket.description.length > 20 ? '...' : ''),
-                author: author.givenName + " " + author.sn
+                author: author.givenName + " " + author.sn,
+                creationDate: moment(ticket.creationDate).format('DD/MM/YYYY HH:mm'),
             }
         })
         .map(async t => {
@@ -57,9 +63,8 @@ router.get('/tickets', auth.isAuthenticated, async (req, res) => {
             return ticket;
         }));
 
-    console.log(tickets);
 
-    res.render('tickets', { layout: 'main', title: 'Liste des Tickets', tickets, page, next, previous, offset: offset + 1, offsetEnd: offset + tickets.length, total: await Ticket.count() });
+    res.render('tickets', { layout: 'main', title: 'Liste des Tickets', tickets, page, next, previous, offset: offset + 1, offsetEnd: offset + tickets.length, total: (await search(config, 'ticket', req.query.search)).length, admin: req.user.groups.includes(config.ldap.adminGroup) });
 });
 
 // select 1 tickt
