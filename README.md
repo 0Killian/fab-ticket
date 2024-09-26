@@ -24,3 +24,12 @@ Exemple de script de lancement (vous pouvez utiliser l'outil déploiement de vot
 ```bash
 npm start
 ```
+
+## Environnement de développement
+
+Un fichier `docker-compose.yml` est fourni pour tester l'application dans un environnement local. Le serveur LDAP et la base de donnée
+n'ont pas de données configurées par défaut. Il est donc nécessaire de créer une arborescence de base sur le serveur LDAP afin de l'utiliser
+(voir les pre-requis ci-dessus et la partie "ldap" de la configuration).
+Pour faciliter la création de l'arborescence, une interface PHPLdapAdmin est disponible sur le port 8081. Les identifiants sont les suivants :
+DN : cn=admin,dc=mydil-nantes,dc=fr
+Mot de passe : root
