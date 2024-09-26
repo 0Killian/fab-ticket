@@ -36,14 +36,14 @@ const Ticket = sequelize.define('Ticket', {
   timestamps: false,
   hooks: {
     beforeUpdate: (ticket) => {
-      if (ticket.status == 2 && ticket.previous('status') !== 1) {
-        throw new Error("Ticket can only be closed if it's in progress");
-      } 
-      if (ticket.status == 1 && ticket.previous('status') !== 0) {
-        throw new Error("Ticket can only be set to 'in progress' (status 1) if it's in 'default' (status 0)");
-      }
-      if (ticket.status == 0) {
-          throw new Error("Ticket can only be opened once");
+      if (ticket.status != ticket.previous('status')) {
+        if (ticket.status == 2 && ticket.previous('status') !== 1) {
+          throw new Error("Ticket can only be closed if it's in progress");
+        } else if (ticket.status == 1 && ticket.previous('status') !== 0) {
+          throw new Error("Ticket can only be set to 'in progress' (status 1) if it's in 'default' (status 0)");
+        } else if (ticket.status == 0) {
+            throw new Error("Ticket can only be opened once");
+        }
       }
     }
   }

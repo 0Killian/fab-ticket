@@ -19,11 +19,11 @@ router.delete("/ticket/:id", auth.isAuthenticated, auth.isAdmin, ticketControlle
  * 
  * emprunt
  */
-router.get("/emprunt", borrowController.getAllBorrow);
-router.get("/emprunt/:id", borrowController.getBorrowById);
-router.post("/emprunt", borrowController.createBorrow);
-router.put("/emprunt", borrowController.updateBorrow);
-router.delete("/emprunt", borrowController.deleteBorrowById);
+router.get("/borrow", borrowController.getAllBorrow);
+router.get("/borrow/:id", borrowController.getBorrowById);
+router.post("/borrow", borrowController.createBorrow);
+router.put("/borrow", borrowController.updateBorrow);
+router.delete("/borrow", borrowController.deleteBorrowById);
 
 /**
  * Material
