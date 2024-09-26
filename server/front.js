@@ -39,7 +39,8 @@ router.get('/tickets', auth.isAuthenticated, async (req, res) => {
             return {
                 ...ticket,
                 description: ticket.description.substring(0, 20) + (ticket.description.length > 20 ? '...' : ''),
-                author: author.givenName + " " + author.sn
+                author: author.givenName + " " + author.sn,
+                creationDate: moment(ticket.creationDate).format('DD/MM/YYYY HH:mm'),
             }
         })
         .map(async t => {

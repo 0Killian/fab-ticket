@@ -85,7 +85,7 @@ const createTicket = async (req, res) => {
     }
 
     try {
-        const newTicket = await Ticket.create({ title, description, author });
+        const newTicket = await Ticket.create({ title, description, author, creationDate: new Date() });
         console.log("Created new ticket: ", newTicket.dataValues);
         res.status(200).end();
     } catch (error) {
