@@ -1,6 +1,6 @@
       <!-- Content -->
         <div class="flex p-6 w-full">
-                <div class="bg-white rounded-md border border-gray-100 w-full p-6 shadow-md shadow-black/5 dark:bg-gray-900 dark:border-gray-800">
+                <div class="bg-white rounded-md border border-gray-100 w-full p-6 shadow-md shadow-black/5 dark:bg-gray-900 dark:border-gray-800 h-fit">
                     <div class="relative overflow-x-auto sm:rounded-lg">
                         <div class="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4 bg-white dark:bg-gray-900">
                             <div>
@@ -32,6 +32,10 @@
                             <button data-modal-target="create-modal" data-modal-toggle="create-modal" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" type="button">
                                 <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                                 Ajouter
+                            </button>
+                            <button id="exportButton" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" type="button">
+                                <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"></path></svg>
+                                Exporter
                             </button>
                             </div>
                         </div>
@@ -330,5 +334,35 @@
 
                 window.location.href = '/tickets?search=' + encodeURIComponent(search);
             }
+
+            document.getElementById('exportButton').addEventListener('click', () => {
+                // Make a GET request to the backend to export data
+                fetch('/admin/export/data/tickets', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'text/csv', // Specify that we expect CSV
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.blob(); // Get the response as a Blob
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob); // Create a URL for the Blob
+                    const a = document.createElement('a'); // Create an anchor element
+                    a.href = url; // Set the href to the Blob URL
+                    a.download = 'tickets.csv'; // Set the filename for the download
+                    document.body.appendChild(a); // Append the anchor to the body
+                    a.click(); // Programmatically click the anchor to trigger the download
+                    a.remove(); // Remove the anchor from the document
+                    window.URL.revokeObjectURL(url); // Free up memory by revoking the Blob URL
+                })
+                .catch(error => {
+                    console.error('Error exporting data:', error);
+                    alert('There was an error exporting the data.');
+                });
+            });
         </script>
 

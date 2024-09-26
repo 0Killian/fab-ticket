@@ -8,6 +8,7 @@ const { Parser } = require('json2csv');
 const moment = require('moment');
 const search = require('./search');
 
+
 const { Ticket, Borrow, Material } = require('../models');
 
 // create ticket
@@ -118,7 +119,7 @@ adminRouter.get('/dashboard', async (req, res) => {
     });
 
     let ongoing_borrows_count = await Borrow.count({
-        where: { endDate: { [Op.gt]: new Date() } } // Use endDate instead of end_date
+        where: { endDate: { [Op.gt]: new Date() } }
     });
 
     let created_tickets_count = await Ticket.count({
@@ -191,14 +192,26 @@ adminRouter.get('/dashboard', async (req, res) => {
     data: closed_tickets_last_7_days.map(entry => entry.count).reverse()
   };
 
-  let borrows = await Borrow.findAll();
+  let borrows = await Borrow.findAll({
+    include: ['material'],
+  });
+
+    // change the date format
+    borrows.forEach(borrow => {
+      borrow.dataValues.startDate = moment(borrow.dataValues.startDate).format('DD/MM/YYYY');
+      borrow.dataValues.endDate = moment(borrow.dataValues.endDate).format('DD/MM/YYYY');
+    });
+
+    console.log(borrows);
 
   let items_count = await Material.count();
   res.render('dashboard', { layout: 'main', title: 'Dashboard', opened_tickets_count, ongoing_borrows_count, items_count, created_tickets_count, closed_tickets_count, created_tickets_data: JSON.stringify(created_tickets_data), closed_tickets_data: JSON.stringify(closed_tickets_data), borrows });
 });
 
 adminRouter.get('/inventory', async (req, res) => {
-  let materials = await Material.findAll();
+  let materials = await Material.findAll({
+    include: ['category', 'condition'],
+});
 
   // change the date format
   materials.forEach(material => {
@@ -208,7 +221,7 @@ adminRouter.get('/inventory', async (req, res) => {
   res.render('inventory', {layout: 'main', title: 'Inventaire', materials});
 });
 
-adminRouter.get('/export/data', async (req, res) => {
+adminRouter.get('/export/data/inventory', async (req, res) => {
   try {
     // Fetch data from the Material model
     const data = await Material.findAll();
@@ -234,13 +247,75 @@ adminRouter.get('/export/data', async (req, res) => {
   }
 });
 
+adminRouter.get('/export/data/tickets', async (req, res) => {
+  try {
+    // Fetch data from the Ticket model
+    const data = await Ticket.findAll();
+
+    // Convert the data to a format suitable for CSV
+    const jsonData = data.map(ticket => ticket.toJSON()); // Convert Sequelize instances to plain objects
+
+    // Convert JSON to CSV
+    const csvParser = new Parser();
+    const csv = csvParser.parse(jsonData);
+
+    // Set headers for the response
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename=tickets.csv`);
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Pragma', 'no-cache');
+
+    // Send the CSV data
+    res.status(200).send(csv);
+  } catch (error) {
+    console.error('Error exporting data:', error);
+    res.status(500).send('Error exporting data');
+  }
+});
+
+adminRouter.get('/export/data/borrows', async (req, res) => {
+  try {
+    // Fetch data from the Borrow model
+    const data = await Borrow.findAll();
+    console.log(data);
+    // Convert the data to a format suitable for CSV
+    const jsonData = data.map(borrow => borrow.toJSON()); // Convert Sequelize instances to plain objects
+
+    // Convert JSON to CSV
+    const csvParser = new Parser();
+    const csv = csvParser.parse(jsonData);
+
+    // Set headers for the response
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename=borrows.csv`);
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Pragma', 'no-cache');
+
+    // Send the CSV data
+    res.status(200).send(csv);
+  } catch (error) {
+    console.error('Error exporting data:', error);
+    res.status(500).send('Error exporting data');
+  }
+});
+
 router.get('/tickets',async (req, res) => {
   let tickets = await Ticket.findAll();
   res.render('tickets', {layout: 'main', title: 'Tickets', tickets});
 });
 
-router.get('/borrows', auth.isAuthenticated, (req, res) => {
-    res.render('borrows', {layout: 'main', title: 'Emprunts'});
+adminRouter.get('/borrows', async (req, res) => {
+  let borrows = await Borrow.findAll({
+    include: ['material'],
+  });
+
+  // change the date format
+  borrows.forEach(borrow => {
+    borrow.dataValues.startDate = moment(borrow.dataValues.startDate).format('DD/MM/YYYY');
+    borrow.dataValues.endDate = moment(borrow.dataValues.endDate).format('DD/MM/YYYY');
+  });
+
+  res.render('borrows', {layout: 'main', title: 'Emprunts', borrows});
 });
 
 router.use('/admin', adminRouter);

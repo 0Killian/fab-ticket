@@ -66,7 +66,7 @@ const updateBorrow = async (req, res) => {
 const createBorrow = async (req, res) => {
     const { startDate, endDate, author, materialId, commentary } = req.body;
 
-    if( startDate === undefined || endDate === undefined || author == undefined || !materialId === undefined|| commentary === undefined ){
+    if( startDate === undefined || endDate === undefined || author === undefined || !materialId === undefined|| commentary === undefined ){
         console.error("Missing parameters");
         res.status(400).end();
     }

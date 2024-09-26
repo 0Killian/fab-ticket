@@ -15,6 +15,10 @@ const Borrow = sequelize.define('Borrow', {
   },
   author: {
     type: DataTypes.STRING(100),
+<<<<<<< HEAD
+=======
+    allowNull: false,
+>>>>>>> 72ead2afe77b1c0543fdee47a7532ee3101b90ea
   },
   materialId: {
     type: DataTypes.INTEGER,
