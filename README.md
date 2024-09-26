@@ -33,3 +33,4 @@ n'ont pas de données configurées par défaut. Il est donc nécessaire de crée
 Pour faciliter la création de l'arborescence, une interface PHPLdapAdmin est disponible sur le port 8081. Les identifiants sont les suivants :
 DN : cn=admin,dc=mydil-nantes,dc=fr
 Mot de passe : root
+Des données de tests sont disponibles dans le fichier `generic-data.sql`.
