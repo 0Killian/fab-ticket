@@ -9,11 +9,11 @@ const searchController = require("../controller/searchController");
 /**
  * ticket CRUD
  */
-router.get("/ticket", ticketController.getAllTicket);
-router.get("/ticket/:id", ticketController.getTicketById);
-router.post("/ticket", ticketController.createTicket);
-router.put("/ticket", ticketController.updateTicket);
-router.delete("/ticket/:id", ticketController.deleteTicketById);
+router.get("/ticket", auth.isAuthenticated, ticketController.getAllTicket);
+router.get("/ticket/:id", auth.isAuthenticated, ticketController.getTicketById);
+router.post("/ticket", auth.isAuthenticated, ticketController.createTicket);
+router.put("/ticket", auth.isAuthenticated, ticketController.updateTicket);
+router.delete("/ticket/:id", auth.isAuthenticated, auth.isAdmin, ticketController.deleteTicketById);
 
 /**
  * 
@@ -36,21 +36,27 @@ router.delete("/material/:id", materialController.deleteMaterialById);
 
 router.get("/search", searchController.search);
 
-router.post('/login', async (req, res) => {
+router.post('/login', auth.isNotAuthenticated, async (req, res) => {
     const { username, password } = req.body;
 
     if (username === undefined || password === undefined) {
-        console.error("data missing");
-        res.status(404);
+        console.error("Missing parameters");
+        res.status(400);
     }
 
     const user = await auth.authenticate(req.app.get('config'), username, password);
     if (user) {
         const token = auth.createToken(req.app.get('config'), user);
         console.log(user);
-        res.status(200).json({ token, groups: user.groups });
+
+        let redirect = '/tickets'
+        if (user.groups.includes(req.app.get('config').ldap.adminGroup)) {
+            redirect = '/admin/dashboard'
+        }
+
+        res.status(200).json({ token, redirect });
     } else {
-        res.status(404);
+        res.status(404).end();
     }
 })
 

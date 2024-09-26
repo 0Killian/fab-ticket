@@ -10,13 +10,12 @@ const jwt = require('jsonwebtoken');
  */
 function isAuthenticated(req, res, next) {
     try {
-        let authorization = req.headers.authorization;
+        let token = req.cookies.token;
 
-        if (!authorization) {
+        if (!token) {
             return res.redirect('/login');
         }
 
-        let token = authorization.split(' ')[1];
         let decoded = jwt.verify(token, req.app.get('config').secret);
 
         if (!decoded) {
@@ -27,7 +26,47 @@ function isAuthenticated(req, res, next) {
         next();
     } catch (e) {
         console.error(e);
-        res.status(500);
+        res.status(500).end();
+    }
+}
+
+/**
+ * Middleware to ensure that the user is not authenticated
+ *
+ * @param req {object}
+ * @param res {object}
+ * @param next {function}
+ */
+function isNotAuthenticated(req, res, next) {
+    console.log(req.cookies);
+
+    try {
+        let token = req.cookies.token;
+
+        if (!token) {
+            next();
+        }
+
+        let decoded = jwt.verify(token, req.app.get('config').secret);
+
+        if (!decoded) {
+            next();
+        }
+        
+        if (req.path.startsWith('/api')) {
+            res.status(401).end();
+        }
+
+        console.log('redirecting ' + decoded.cn);
+
+        if (decoded.groups.includes(req.app.get('config').ldap.adminGroup)) {
+            res.redirect('/admin/dashboard');
+        } else {
+            res.redirect('/tickets');
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(500).end();
     }
 }
 
@@ -43,7 +82,7 @@ function isAdmin(req, res, next) {
     if (req.user.groups.includes(config.ldap.adminGroup)) {
         next();
     } else {
-        res.status(403);
+        res.status(403).end();
     }
 }
 
@@ -153,6 +192,7 @@ function validate(username) {
 
 module.exports = {
     isAdmin,
+    isNotAuthenticated,
     isAuthenticated,
     authenticate,
     createToken,

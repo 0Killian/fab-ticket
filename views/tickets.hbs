@@ -29,7 +29,7 @@
                                     </div>
                                 <input type="text" id="table-search-users" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rechercher des tickets">
                             </div>
-                            <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" type="button">
+                            <button data-modal-target="create-modal" data-modal-toggle="create-modal" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" type="button">
                                 <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                                 Ajouter
                             </button>
@@ -75,7 +75,7 @@
                             </tbody>
                         </table>
                         <!-- Add modal -->
-                        <div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <div id="create-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                             <div class="relative p-4 w-full max-w-md max-h-full">
                                 <!-- Modal content -->
                                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -84,15 +84,15 @@
                                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                                             Ajouter un ticket
                                         </h3>
-                                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
+                                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="create-modal">
                                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                                             </svg>
-                                            <span class="sr-only">Fermer la modal</span>
+                                            <span class="sr-only close-modal">Fermer la modal</span>
                                         </button>
                                     </div>
                                     <!-- Modal body -->
-                                    <form class="p-4 md:p-5">
+                                    <form class="p-4 md:p-5 create-ticket" onsubmit="return addTicket(event)">
                                         <div class="grid gap-4 mb-4 grid-cols-2">
                                             <div class="col-span-2">
                                                 <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titre</label>
@@ -103,7 +103,7 @@
                                                 <textarea id="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Écrivez la description du billet ici"></textarea>                    
                                             </div>
                                         </div>
-                                        <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 submit-button">
                                             <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                                             Ajouter un ticket
                                         </button>
@@ -126,7 +126,7 @@
                                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                                             </svg>
-                                            <span class="sr-only">Fermer modal</span>
+                                            <span class="sr-only close-modal">Fermer modal</span>
                                         </button>
                                     </div>
                                     <!-- Modal body -->
@@ -164,13 +164,13 @@
                     <div class="flex flex-col items-center">
                         <!-- Help text -->
                         <span class="text-sm text-gray-700 dark:text-gray-400">
-                            Affichage de <span class="font-semibold text-gray-900 dark:text-white">1</span> à <span class="font-semibold text-gray-900 dark:text-white">10</span> sur <span class="font-semibold text-gray-900 dark:text-white">100</span> entrées
+                            Affichage de <span class="font-semibold text-gray-900 dark:text-white">{{offset}}</span> à <span class="font-semibold text-gray-900 dark:text-white">{{offsetEnd}}</span> sur <span class="font-semibold text-gray-900 dark:text-white">{{total}}</span> entrées
                         </span>
                         <div class="inline-flex mt-2 xs:mt-0">
                             <!-- Buttons -->
-                            <button class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                            <button class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 rounded-s dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 {{#if previous}}dark:hover:bg-gray-700 hover:bg-gray-900 dark:hover:text-white {{/if}}"
                                 {{#if previous}}
-                                    onclick="pagingPrevious"
+                                    onclick="pagingPrevious()"
                                 {{else}}
                                     disabled
                                 {{/if}}>
@@ -179,9 +179,9 @@
                                 </svg>
                                 Précédent
                             </button>
-                            <button class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                            <button class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 {{#if next}}dark:hover:bg-gray-700 hover:bg-gray-900 dark:hover:text-white{{/if}}"
                                 {{#if next}}
-                                    onclick="pagingNext"
+                                    onclick="pagingNext()"
                                 {{else}}
                                     disabled
                                 {{/if}}>
@@ -202,8 +202,8 @@
 
                 // Check if the "checkAll" checkbox exists
                 if (!checkAllBox) {
-                console.error("Master checkbox with ID 'checkAll' not found.");
-                return;
+                    console.error("Master checkbox with ID 'checkAll' not found.");
+                    return;
                 }
 
                 // Get all checkboxes in the tbody
@@ -211,26 +211,26 @@
 
                 // Add event listener to the "check all" checkbox
                 checkAllBox.addEventListener("change", function() {
-                // Loop through all checkboxes and set their checked state to match the "check all" checkbox
-                checkboxes.forEach(function(checkbox) {
-                    checkbox.checked = checkAllBox.checked;
-                });
+                    // Loop through all checkboxes and set their checked state to match the "check all" checkbox
+                    checkboxes.forEach(function(checkbox) {
+                        checkbox.checked = checkAllBox.checked;
+                    });
                 });
 
                 // Add event listeners to individual checkboxes
                 checkboxes.forEach(function(checkbox) {
-                checkbox.addEventListener("change", function() {
-                    // If one checkbox is unchecked, uncheck the "check all" checkbox
-                    if (!this.checked) {
-                    checkAllBox.checked = false;
-                    } else {
-                    // If all checkboxes are checked, also check the "check all" checkbox
-                    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-                    if (allChecked) {
-                        checkAllBox.checked = true;
-                    }
-                    }
-                });
+                    checkbox.addEventListener("change", function() {
+                        // If one checkbox is unchecked, uncheck the "check all" checkbox
+                        if (!this.checked) {
+                            checkAllBox.checked = false;
+                        } else {
+                            // If all checkboxes are checked, also check the "check all" checkbox
+                            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                            if (allChecked) {
+                                checkAllBox.checked = true;
+                            }
+                        }
+                    });
                 });
             });
 
@@ -245,5 +245,37 @@
                     window.location.href = '/tickets?page=' + page;
                 }
             }
-            </script>
+
+            async function addTicket(event) {
+                event.preventDefault();
+
+                const form = document.querySelector("#create-modal form");
+                let submitButton = document.querySelector("#create-modal .submit-button");
+
+                let payload = {
+                    title: form.elements.name.value,
+                    description: form.elements.description.value,
+                };
+
+                submitButton.disabled = true;
+                let response = await fetch("/api/ticket", {
+                    method: "POST",
+                    body: JSON.stringify(payload),
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                });
+
+                if (response.ok) {
+                    document.querySelector("#create-modal .close-modal").click();
+                }
+
+                form.reset();
+                submitButton.disabled = false;
+
+                if (response.ok) {
+                    window.location.reload();
+                }
+            }
+        </script>
 

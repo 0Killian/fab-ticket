@@ -22,6 +22,7 @@ const getTicketById = async (req, res) => {
         if (!ticket) {
             console.log("Ticket not found");
             res.status(404).end();
+            return;
         }
 
         res.status(200).json(ticket.dataValues);
@@ -39,6 +40,7 @@ const updateTicket = async(req, res) => {
         if( status === undefined || title === undefined || description === undefined) {
             console.error("Missing parameters");
             res.status(400).end();
+            return;
         }
 
         const modifyTicket = await Ticket.findByPk(id);
@@ -46,11 +48,13 @@ const updateTicket = async(req, res) => {
         if (req.user.uid !== modifyTicket.author && !req.user.groups.includes('admin')) {
             console.error("Unauthorized access");
             res.status(403).end();
+            return;
         }
 
         if (!modifyTicket) {
             console.log("Ticket not found: " + id);
             res.status(404).end();
+            return;
         }
 
         modifyTicket.status = status || modifyTicket.status;
@@ -68,16 +72,17 @@ const updateTicket = async(req, res) => {
 }
 
 const createTicket = async (req, res) => {
-    const { status, title, description } = req.body;
+    const { title, description } = req.body;
     const author = req.user.uid;
 
-    if( status === undefined || title === undefined || description === undefined) {
+    if( title === undefined || description === undefined) {
         console.error("Missing parameters");
         res.status(400).end();
+        return;
     }
 
     try {
-        const newTicket = await Ticket.create({ status, title, description, author });
+        const newTicket = await Ticket.create({ title, description, author });
         console.log("Created new ticket: ", newTicket.dataValues);
         res.status(200).end();
     } catch (error) {

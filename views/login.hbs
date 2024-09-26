@@ -61,14 +61,10 @@
             if (response.status === 200) {
               let res = await response.json();
               console.log(res);
-              let { token, groups } = res;
+              let { token, redirect } = res;
               document.cookie = `token=${token};path=/;`;
 
-              if (groups.includes('admin')) {
-                window.location.href = '/admin/dashboard';
-              } else {
-                window.location.href = '/tickets';
-              }
+              window.location.href = redirect;
 
             } else {
               alert('Identifiant ou mot de passe incorrect');

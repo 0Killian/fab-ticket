@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const config = require('../config');
-const sequelize = require('./sequelize/database');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const front_router = require('./front');
 const path = require('path');
@@ -17,6 +17,9 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 // Enable CORS
 app.use(cors());
+
+// Enable cookies handling
+app.use(cookieParser());
 
 // App context
 app.set('config', config);
