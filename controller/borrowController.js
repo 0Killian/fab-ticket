@@ -31,7 +31,7 @@ const getBorrowById = async (req, res) => {
 }
 
 
-const updateBorrow = async (req, res) =>{
+const updateBorrow = async (req, res) => {
     try {
         const id = req.params.id;
         const modifyBorrow = await Borrow.findByPk(id);
@@ -39,12 +39,12 @@ const updateBorrow = async (req, res) =>{
         const { startDate, endDate, userId, materialId, description } = req.body;
 
         if (startDate === undefined || endDate === undefined || userId === undefined || materialId === undefined || description === undefined) {
-            console.log("Missing parameters");
+            console.error("Missing parameters");
             res.status(400).end();
         }
 
         if(!modifyBorrow) {
-            console.log("Borrow not found:", id);
+            console.error("Borrow not found:", id);
             res.status(404).end();
         }
 

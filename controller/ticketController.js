@@ -37,7 +37,7 @@ const updateTicket = async(req, res) => {
         const id = req.params.id;
         let { status, title, description } = req.body;
 
-        if( status === undefined || title === undefined || description === undefined) {
+        if( title === undefined || description === undefined) {
             console.error("Missing parameters");
             res.status(400).end();
             return;
@@ -45,19 +45,22 @@ const updateTicket = async(req, res) => {
 
         const modifyTicket = await Ticket.findByPk(id);
 
-        if (req.user.uid !== modifyTicket.author && !req.user.groups.includes('admin')) {
-            console.error("Unauthorized access");
-            res.status(403).end();
-            return;
-        }
-
         if (!modifyTicket) {
             console.log("Ticket not found: " + id);
             res.status(404).end();
             return;
         }
 
-        modifyTicket.status = status || modifyTicket.status;
+        if (req.user.uid !== modifyTicket.author && !req.user.groups.includes('admin')) {
+            console.error("Unauthorized access");
+            res.status(403).end();
+            return;
+        }
+
+        if (status !== undefined && req.user.groups.includes('admin')) {
+            modifyTicket.status = status;
+        }
+        
         modifyTicket.title = title || modifyTicket.Title;
         modifyTicket.description = description || modifyTicket.description
         
