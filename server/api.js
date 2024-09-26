@@ -50,6 +50,7 @@ router.post('/login', auth.isNotAuthenticated, async (req, res) => {
         console.log(user);
 
         let redirect = '/tickets'
+        console.log(user);
         if (user.groups.includes(req.app.get('config').ldap.adminGroup)) {
             redirect = '/admin/dashboard'
         }

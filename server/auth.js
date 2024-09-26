@@ -38,31 +38,34 @@ function isAuthenticated(req, res, next) {
  * @param next {function}
  */
 function isNotAuthenticated(req, res, next) {
-    console.log(req.cookies);
-
     try {
         let token = req.cookies.token;
 
-        if (!token) {
+        if (token === undefined) {
             next();
+            return;
         }
 
         let decoded = jwt.verify(token, req.app.get('config').secret);
 
         if (!decoded) {
             next();
+            return;
         }
         
         if (req.path.startsWith('/api')) {
             res.status(401).end();
+            return;
         }
 
         console.log('redirecting ' + decoded.cn);
 
         if (decoded.groups.includes(req.app.get('config').ldap.adminGroup)) {
             res.redirect('/admin/dashboard');
+            return;
         } else {
             res.redirect('/tickets');
+            return;
         }
     } catch (e) {
         console.error(e);

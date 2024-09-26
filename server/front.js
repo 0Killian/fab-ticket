@@ -243,6 +243,10 @@ router.get('/borrows', auth.isAuthenticated, (req, res) => {
 
 router.use('/admin', adminRouter);
 
+router.get('/', (req, res) => {
+  res.redirect('/login');
+});
+
 router.get('/login', auth.isNotAuthenticated, (req, res) => {
     res.render('login', {title: "Connexion"});
 });
@@ -251,20 +255,8 @@ router.get('/profile', (req, res) => {
   res.render('profile', {layout: 'main', title: "Profile"});
 });
 
-router.get('/logout', (req, res) => {
-  console.log('Session before logout:', req.session); // Check session
-  if (!req.session) {
-    return res.status(500).send('Session is undefined');
-  }
-  
-  req.session.destroy(err => {
-    if (err) {
-      console.error('Error destroying session:', err);
-      return res.status(500).send('Error logging out');
-    }
-    // Redirect to login page after successful logout
-    res.redirect('/login');
-  });
+router.get('/logout', auth.isAuthenticated, (req, res) => {
+  res.clearCookie('token').redirect('/login');
 });
 
 module.exports = router;
