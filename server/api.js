@@ -31,7 +31,7 @@ router.delete("/emprunt", borrowController.deleteBorrowById);
 router.get("/material", materialController.getAllMaterial);
 router.get("/material/:id", materialController.getMaterialById);
 router.post("/material", materialController.createMaterial);
-router.put("/material", materialController.updateMaterial);
+router.put("/material/:id", materialController.updateMaterial);
 router.delete("/material/:id", materialController.deleteMaterialById);
 
 router.get("/search", searchController.search);
