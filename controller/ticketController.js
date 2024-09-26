@@ -33,8 +33,8 @@ const getTicketById = async (req, res) => {
 }
 
 const updateTicket = async(req, res) => {
+    const id = req.params.id;
     try {
-        const id = req.params.id;
         let { status, title, description } = req.body;
 
         if( title === undefined || description === undefined) {
@@ -51,17 +51,18 @@ const updateTicket = async(req, res) => {
             return;
         }
 
-        if (req.user.uid !== modifyTicket.author && !req.user.groups.includes('admin')) {
+        if (req.user.uid !== modifyTicket.author && !req.user.groups.includes(req.app.get('config').ldap.adminGroup)) {
             console.error("Unauthorized access");
             res.status(403).end();
             return;
         }
 
-        if (status !== undefined && req.user.groups.includes('admin')) {
+        console.log(status, " ", req.user.groups.includes(req.app.get('config').ldap.adminGroup));
+        if (status !== undefined && req.user.groups.includes(req.app.get('config').ldap.adminGroup)) {
             modifyTicket.status = status;
         }
         
-        modifyTicket.title = title || modifyTicket.Title;
+        modifyTicket.title = title || modifyTicket.title;
         modifyTicket.description = description || modifyTicket.description
         
         await modifyTicket.save();

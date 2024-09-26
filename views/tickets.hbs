@@ -27,15 +27,11 @@
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                                         </svg>
                                     </div>
-                                <input type="text" id="table-search-users" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rechercher des tickets">
+                                <input type="text" id="table-search-users" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rechercher des tickets" onkeypress="search(event)">
                             </div>
                             <button data-modal-target="create-modal" data-modal-toggle="create-modal" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" type="button">
                                 <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                                 Ajouter
-                            </button>
-                            <button class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" type="button">
-                                <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"></path></svg>
-                                Exporter
                             </button>
                             </div>
                         </div>
@@ -251,15 +247,9 @@
                 const form = document.querySelector("#create-modal form");
                 let submitButton = document.querySelector("#create-modal .submit-button");
 
-                let status = undefined;
-                if (form.elements.status) {
-                    status = form.elements.status.value;
-                }
-
                 let payload = {
                     title: form.elements.name.value,
                     description: form.elements.description.value,
-                    status: status,
                 };
 
                 submitButton.disabled = true;
@@ -291,10 +281,18 @@
                 const form = document.querySelector("#edit-modal form");
                 let submitButton = document.querySelector("#edit-modal .submit-button");
 
+                let status = undefined;
+                if (form.elements.status) {
+                    status = form.elements.status.value;
+                }
+
                 let payload = {
                     title: form.elements.name.value,
                     description: form.elements.description.value,
+                    status: status
                 };
+
+                console.log(payload);
 
                 submitButton.disabled = true;
                 let response = await fetch("/api/ticket/" + id, {
@@ -319,6 +317,18 @@
 
             function setFormId(id) {
                 document.querySelector("#edit-modal form").dataset.id = id;
+            }
+
+            async function search(event) {
+                console.log(event);
+                if (event.keyCode != 13) {
+                    return;
+                }
+
+                let search = event.target.value;
+                console.log(encodeURIComponent(search));
+
+                window.location.href = '/tickets?search=' + encodeURIComponent(search);
             }
         </script>
 
