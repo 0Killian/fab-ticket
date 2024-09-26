@@ -12,18 +12,18 @@ const searchController = require("../controller/searchController");
 router.get("/ticket", auth.isAuthenticated, ticketController.getAllTicket);
 router.get("/ticket/:id", auth.isAuthenticated, ticketController.getTicketById);
 router.post("/ticket", auth.isAuthenticated, ticketController.createTicket);
-router.put("/ticket", auth.isAuthenticated, ticketController.updateTicket);
+router.put("/ticket/:id", auth.isAuthenticated, ticketController.updateTicket);
 router.delete("/ticket/:id", auth.isAuthenticated, auth.isAdmin, ticketController.deleteTicketById);
 
 /**
  * 
  * emprunt
  */
-router.get("/emprunt", borrowController.getAllBorrow);
-router.get("/emprunt/:id", borrowController.getBorrowById);
-router.post("/emprunt", borrowController.createBorrow);
-router.put("/emprunt", borrowController.updateBorrow);
-router.delete("/emprunt", borrowController.deleteBorrowById);
+router.get("/borrow", borrowController.getAllBorrow);
+router.get("/borrow/:id", borrowController.getBorrowById);
+router.post("/borrow", borrowController.createBorrow);
+router.put("/borrow", borrowController.updateBorrow);
+router.delete("/borrow", borrowController.deleteBorrowById);
 
 /**
  * Material
@@ -47,7 +47,6 @@ router.post('/login', auth.isNotAuthenticated, async (req, res) => {
     const user = await auth.authenticate(req.app.get('config'), username, password);
     if (user) {
         const token = auth.createToken(req.app.get('config'), user);
-        console.log(user);
 
         let redirect = '/tickets'
         console.log(user);

@@ -31,26 +31,25 @@ const getBorrowById = async (req, res) => {
 }
 
 
-const updateBorrow = async (req, res) =>{
+const updateBorrow = async (req, res) => {
     try {
         const id = req.params.id;
         const modifyBorrow = await Borrow.findByPk(id);
 
-        const { startDate, endDate, userId, materialId, description } = req.body;
+        const { startDate, endDate, materialId, description } = req.body;
 
-        if (startDate === undefined || endDate === undefined || userId === undefined || materialId === undefined || description === undefined) {
-            console.log("Missing parameters");
+        if (startDate === undefined || endDate === undefined || materialId === undefined || description === undefined) {
+            console.error("Missing parameters");
             res.status(400).end();
         }
 
         if(!modifyBorrow) {
-            console.log("Borrow not found:", id);
+            console.error("Borrow not found:", id);
             res.status(404).end();
         }
 
         modifyBorrow.startDate = startDate || modifyBorrow.startDate;
         modifyBorrow.endDate = endDate || modifyBorrow.endDate;
-        modifyBorrow.userId = userId || modifyBorrow.userId;
         modifyBorrow.materialId = materialId || modifyBorrow.materialId;
         modifyBorrow.description = description || modifyBorrow.description;
 
@@ -65,15 +64,15 @@ const updateBorrow = async (req, res) =>{
 }
 
 const createBorrow = async (req, res) => {
-    const { startDate, endDate, userId, materialId, commentary } = req.body;
+    const { startDate, endDate, author, materialId, commentary } = req.body;
 
-    if( startDate === undefined || endDate === undefined || userId === undefined || !materialId === undefined|| commentary === undefined ){
+    if( startDate === undefined || endDate === undefined || author === undefined || !materialId === undefined|| commentary === undefined ){
         console.error("Missing parameters");
         res.status(400).end();
     }
 
     try {
-        const newBorrow = Borrow.create({ startDate, endDate, userId, materialId, commentary });
+        const newBorrow = Borrow.create({ startDate, endDate, author, materialId, commentary });
         console.log("Created new borrow: ", newBorrow.dataValues);
         res.status(200).end();
     } catch (error) {
