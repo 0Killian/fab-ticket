@@ -1,5 +1,6 @@
 // Import Sequelize et autres modules nécessaires
 const { Sequelize } = require('sequelize');
+require('../../models');
 
 // Importe la configuration de la base de données
 const id = require('../../config.js');

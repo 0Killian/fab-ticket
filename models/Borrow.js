@@ -13,8 +13,9 @@ const Borrow = sequelize.define('Borrow', {
   endDate: {
     type: DataTypes.DATE,
   },
-  userId: {
-    type: DataTypes.INTEGER,
+  author: {
+    type: DataTypes.STRING(100),
+    allowNull: false,
   },
   materialId: {
     type: DataTypes.INTEGER,

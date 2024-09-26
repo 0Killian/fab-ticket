@@ -1,6 +1,6 @@
       <!-- Content -->
         <div class="flex p-6 w-full">
-                <div class="bg-white rounded-md border border-gray-100 w-full p-6 shadow-md shadow-black/5 dark:bg-gray-900 dark:border-gray-800">
+                <div class="bg-white rounded-md border border-gray-100 w-full p-6 shadow-md shadow-black/5 dark:bg-gray-900 dark:border-gray-800 h-fit">
                     <div class="relative overflow-x-auto sm:rounded-lg">
                         <div class="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4 bg-white dark:bg-gray-900">
                             <div>
@@ -321,7 +321,7 @@
 
             document.getElementById('exportButton').addEventListener('click', () => {
                 // Make a GET request to the backend to export data
-                fetch('/admin/export/data', {
+                fetch('/admin/export/data/inventory', {
                     method: 'GET',
                     headers: {
                         'Accept': 'text/csv', // Specify that we expect CSV

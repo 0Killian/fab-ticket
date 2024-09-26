@@ -76,7 +76,7 @@
                         </div>
                         <div class="rounded-md border border-dashed border-gray-200 p-4 dark:border-gray-700">
                             <div class="flex items-center mb-0.5">
-                                <div class="text-xl font-semibold dark:text-gray-200">{{closed_tickets_count}}</div>
+                                <div class="text-xl font-semibold dark:text-gray-200">7</div>
                             </div>
                             <span class="text-gray-400 text-sm">Fermé</span>
                         </div>
@@ -94,33 +94,13 @@
                             <thead>
                                 <tr>
                                     <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md dark:bg-gray-800">Objet</th>
-                                    <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left rounded-tr-md rounded-br-md dark:bg-gray-800">Status</th>
+                                    <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left dark:bg-gray-800">Date d'emprunt</th>
+                                    <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left rounded-tr-md rounded-br-md dark:bg-gray-800">Date de retour</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{#each tickets}}
-                                <tr>
-                                    <td class="py-2 px-4 border-b border-b-gray-50">
-                                        <div class="flex items-center">
-                                            <img src="https://placehold.co/32x32" alt="" class="w-8 h-8 rounded object-cover block">
-                                            <a href="#" class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">Create landing page</a>
-                                        </div>
-                                    </td>
-                                    <td class="py-2 px-4 border-b border-b-gray-50">
-                                        <span class="inline-block p-1 rounded bg-emerald-500/10 text-emerald-500 font-medium text-[12px] leading-none">Retour</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="py-2 px-4 border-b border-b-gray-50">
-                                        <div class="flex items-center">
-                                            <img src="https://placehold.co/32x32" alt="" class="w-8 h-8 rounded object-cover block">
-                                            <a href="#" class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">Create landing page</a>
-                                        </div>
-                                    </td>
-                                    <td class="py-2 px-4 border-b border-b-gray-50">
-                                        <span class="inline-block p-1 rounded bg-rose-500/10 text-rose-500 font-medium text-[12px] leading-none">Emprunts</span>
-                                    </td>
-                                </tr>
+                                {{#each borrows}}
+                                    {{> dashboard_borrow}}
                                 {{/each}}
                             </tbody>
                         </table>
@@ -151,7 +131,7 @@
                     },
                     {
                         label: 'Terminé',
-                        data: closedTicketsData.data,
+                        data: [1,2,1,0,1,2,0],
                         borderWidth: 1,
                         fill: true,
                         pointBackgroundColor: 'rgb(16, 185, 129)',

@@ -106,7 +106,7 @@ async function authenticate(config, username, password) {
     }
 
     try {
-        let user = await ldap.authenticate({
+        let opts = {  
             ldapOpts: config.ldap.opts,
             userDn: userDn,
             userPassword: password,
@@ -116,7 +116,11 @@ async function authenticate(config, username, password) {
             usernameAttribute: config.ldap.usernameAttribute,
             userSearchBase: config.ldap.usersSearchBase,
             username
-        });
+        };
+
+        console.log(opts);
+
+        let user = await ldap.authenticate(opts);
 
         if (!user) {
             return null;
