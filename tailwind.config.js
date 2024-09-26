@@ -10,4 +10,7 @@ module.exports = {
   plugins: [
     require('@tailwindcss/forms'),  // Include this only if you have installed the plugin
   ],
+  safelist: [
+    {pattern:/./}
+  ],
 }

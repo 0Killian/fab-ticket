@@ -36,7 +36,6 @@ router.get('/tickets', auth.isAuthenticated, async (req, res) => {
 
     tickets = await Promise.all(tickets
         .map(ticket => ticket.dataValues)
-        .sort((a, b) => b.creationDate - a.creationDate)
         .map(async ticket => {
             let author = await auth.getUser(config, ticket.author);
             return {

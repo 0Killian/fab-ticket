@@ -43,7 +43,10 @@ module.exports = async (config, type, query, limit, offset) => {
                     status: {
                         [Op.in]: status
                     },
-                }
+                },
+                order: [
+                    ['creationDate', 'DESC']
+                ]
             };
 
             if (query !== "") {
