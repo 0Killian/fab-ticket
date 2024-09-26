@@ -9,20 +9,68 @@ const jwt = require('jsonwebtoken');
  * @param next {function}
  */
 function isAuthenticated(req, res, next) {
-  try {
-    let token = req.headers.authentication.split(' ')[1];
-    let decoded = jwt.verify(token, req.app.get('config').secret);
-    
-    if (!decoded) {
-      return res.redirect('/login');
-    }
+    try {
+        let token = req.cookies.token;
 
-    req.user = decoded;
-    next();
-  } catch(e) {
-    console.error(e);
-    res.status(500).render('internalError', {config: req.app.get('config')});
-  }
+        if (!token) {
+            return res.redirect('/login');
+        }
+
+        let decoded = jwt.verify(token, req.app.get('config').secret);
+
+        if (!decoded) {
+            return res.redirect('/login');
+        }
+
+        req.user = decoded;
+        next();
+    } catch (e) {
+        console.error(e);
+        res.status(500).end();
+    }
+}
+
+/**
+ * Middleware to ensure that the user is not authenticated
+ *
+ * @param req {object}
+ * @param res {object}
+ * @param next {function}
+ */
+function isNotAuthenticated(req, res, next) {
+    try {
+        let token = req.cookies.token;
+
+        if (token === undefined) {
+            next();
+            return;
+        }
+
+        let decoded = jwt.verify(token, req.app.get('config').secret);
+
+        if (!decoded) {
+            next();
+            return;
+        }
+        
+        if (req.path.startsWith('/api')) {
+            res.status(401).end();
+            return;
+        }
+
+        console.log('redirecting ' + decoded.cn);
+
+        if (decoded.groups.includes(req.app.get('config').ldap.adminGroup)) {
+            res.redirect('/admin/dashboard');
+            return;
+        } else {
+            res.redirect('/tickets');
+            return;
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(500).end();
+    }
 }
 
 /**
@@ -33,12 +81,12 @@ function isAuthenticated(req, res, next) {
  * @param next {function}
  */
 function isAdmin(req, res, next) {
-  const config = req.app.get('config');
-  if (req.user.groups.includes(config.ldap.adminGroup)) {
-    next();
-  } else {
-    res.status(403).render('forbidden', {config: req.app.get('config')});
-  }
+    const config = req.app.get('config');
+    if (req.user.groups.includes(config.ldap.adminGroup)) {
+        next();
+    } else {
+        res.status(403).end();
+    }
 }
 
 /**
@@ -50,32 +98,76 @@ function isAdmin(req, res, next) {
  * 
  * @returns {user|null}
  */
-async function authenticate(config, username, password, callback) {
-  const userDn = config.ldap.userDnQuery.replace("#[[username]]", username);
+async function authenticate(config, username, password) {
+    const userDn = config.ldap.userDnQuery.replace("#[[username]]", username);
 
-  if (!validate(username)) {
-    return null;
-  }
-
-  try {
-    let user = await ldap.authenticate({
-      ldapOpts: config.ldap.opts,
-      userDn: userDn,
-      userPassword: password,
-      groupsSearchBase: config.ldap.groupsSearchBase,
-      groupClass: config.ldap.groupClass,
-      groupMemberAttribute: config.ldap.groupMemberAttribute,
-    });
-
-    if (!user) {
-      return null;
+    if (!validate(username)) {
+        return null;
     }
 
-    return user;
-  } catch (e) {
-    console.error(e);
-    return null;
-  }
+    try {
+        let user = await ldap.authenticate({
+            ldapOpts: config.ldap.opts,
+            userDn: userDn,
+            userPassword: password,
+            groupsSearchBase: config.ldap.groupsSearchBase,
+            groupClass: config.ldap.groupClass,
+            groupMemberAttribute: config.ldap.groupMemberAttribute,
+            usernameAttribute: config.ldap.usernameAttribute,
+            userSearchBase: config.ldap.usersSearchBase,
+            username
+        });
+
+        if (!user) {
+            return null;
+        }
+
+        user.groups = user.groups.map(group => group.objectName.split(',')[0].split('=')[1]);
+
+        return user;
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+}
+
+/**
+ * Retrieves user data
+ * 
+ * @param config {object}
+ * @param username {string}
+ * 
+ * @returns {user|null}
+ */
+async function getUser(config, username) {
+    const userDn = config.ldap.userDnQuery.replace("#[[username]]", username);
+
+    try {
+        let user = await ldap.authenticate({
+            ldapOpts: config.ldap.opts,
+            adminDn: config.ldap.adminDn,
+            adminPassword: config.ldap.adminPassword,
+            userDn: userDn,
+            verifyUserExists: true,
+            groupsSearchBase: config.ldap.groupsSearchBase,
+            groupClass: config.ldap.groupClass,
+            groupMemberAttribute: config.ldap.groupMemberAttribute,
+            usernameAttribute: config.ldap.usernameAttribute,
+            userSearchBase: config.ldap.usersSearchBase,
+            username
+        });
+
+        if (!user) {
+            return null;
+        }
+
+        user.groups = user.groups.map(group => group.objectName.split(',')[0].split('=')[1]);
+
+        return user;
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
 }
 
 /**
@@ -86,7 +178,7 @@ async function authenticate(config, username, password, callback) {
  * @returns {string}
  */
 function createToken(config, user) {
-  return jwt.sign(user, config.secret);
+    return jwt.sign(user, config.secret);
 }
 
 /**
@@ -97,13 +189,15 @@ function createToken(config, user) {
   * @returns {boolean}
   */
 function validate(username) {
-  // Only alpha numeric
-  return /^[a-z0-9]+$/i.test(username);
+    // Only alpha numeric
+    return /^[a-z0-9]+$/i.test(username);
 }
 
 module.exports = {
-  isAdmin,
-  isAuthenticated,
-  authenticate,
-  createToken
+    isAdmin,
+    isNotAuthenticated,
+    isAuthenticated,
+    authenticate,
+    createToken,
+    getUser
 };

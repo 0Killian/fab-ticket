@@ -45,6 +45,15 @@ module.exports = {
 
     // Attribute used to get the group members
     groupMemberAttribute: 'uniqueMember',
+
+    // Admin group
+    adminGroup: 'admin',
+
+    // Admin DN
+    adminDn: 'cn=admin,dc=mydil-nantes,dc=fr',
+
+    // Admin password
+    adminPassword: 'root',
   },
 
   // Optional: HTTPS config

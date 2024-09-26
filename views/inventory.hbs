@@ -27,13 +27,13 @@
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                                         </svg>
                                     </div>
-                                <input type="text" id="table-search-users" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rechercher des tickets">
+                                <input type="text" id="table-search-users" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Rechercher un objet">
                             </div>
                             <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" type="button">
                                 <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                                 Ajouter
                             </button>
-                            <button class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" type="button">
+                            <button id="exportButton" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" type="button">
                                 <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"></path></svg>
                                 Exporter
                             </button>
@@ -49,19 +49,25 @@
                                         </div>
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        Titre
+                                        Identifiant de l'objet
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Description
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        Utilisateur
+                                        Catégorie
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Status
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        Date
+                                        Date d'achat
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Condition
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Image
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Actions
@@ -69,6 +75,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {{#each materials}}
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td class="w-4 p-4">
                                         <div class="flex items-center">
@@ -78,69 +85,42 @@
                                     </td>
                                     <th scope="row" class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <div class="ps-3">
-                                            <div class="text-base font-semibold">Ecran noir</div>
+                                            <div class="text-base font-semibold">{{this.inventoryId}}</div>
                                         </div>
                                     </th>
                                     <td class="px-6 py-4">
-                                        L'écran de mon ...
+                                        {{this.description}}
                                     </td>
                                     <td class="px-6 py-4">
-                                        <div class="text-base font-semibold">Solange Martin</div>
+                                        <div class="text-base font-semibold">{{this.categoryId}}</div>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <div class="flex items-center">
-                                            <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Ouvert</span>
-                                        </div>
+                                        {{#if this.available}}
+                                            <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Disponible</span>
+                                        {{else}}
+                                            <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Emprunter</span>
+                                        {{/if}}
                                     </td>
                                     <td class="px-6 py-4">
-                                        <div class="text-base font-semibold">15/11/2024</div>
+                                        <div class="text-base font-semibold">{{this.buyDate}}</div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-base font-semibold">{{this.conditionId}}</div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-base font-semibold">{{this.photo}}</div>
                                     </td>
                                     <td class="px-6 py-4 flex space-x-2">
                                         <!-- Modal toggle -->
-                                        <button data-modal-target="select-modal" data-modal-toggle="select-modal" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white" type="button">
+                                        <button id="{{this.id}}"data-modal-target="select-modal" data-modal-toggle="select-modal" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white" type="button">
                                             Modifier
                                         </button>
-                                        <button data-modal-hide="popup-modal" type="button" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white">
+                                        <button id="{{this.id}}" data-modal-hide="popup-modal" type="button" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white">
                                             Supprimer
                                         </button>
                                     </td>
                                 </tr>
-                                <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <td class="w-4 p-4">
-                                        <div class="flex items-center">
-                                            <input id="checkbox-table-search-3" type="checkbox" class="checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="checkbox-table-search-3" class="sr-only">checkbox</label>
-                                        </div>
-                                    </td>
-                                    <th scope="row" class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div class="ps-3">
-                                            <div class="text-base font-semibold">Imprimante qui ...</div>
-                                        </div>
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        J'ai un problème avec...
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-base font-semibold">Solange Martin</div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center">
-                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">En cours</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-base font-semibold">14/09/2024</div>
-                                    </td>
-                                    <td class="px-6 py-4 flex space-x-2">
-                                        <!-- Modal toggle -->
-                                        <button data-modal-target="select-modal" data-modal-toggle="select-modal" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white" type="button">
-                                            Modifier
-                                        </button>
-                                        <button data-modal-hide="popup-modal" type="button" class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded hover:bg-gray-900 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white">
-                                            Supprimer
-                                        </button>
-                                    </td>
-                                </tr>
+                                {{/each}}
                             </tbody>
                         </table>
                         <!-- Add modal -->
@@ -151,7 +131,7 @@
                                     <!-- Modal header -->
                                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            Ajouter un ticket
+                                            Ajouter un objet
                                         </h3>
                                         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
                                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -165,7 +145,7 @@
                                         <div class="grid gap-4 mb-4 grid-cols-2">
                                             <div class="col-span-2">
                                                 <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titre</label>
-                                                <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Titre du ticket" required="">
+                                                <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Titre de l'objet" required="">
                                             </div>
                                             <div class="col-span-2">
                                                 <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
@@ -174,7 +154,7 @@
                                         </div>
                                         <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                             <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                                            Ajouter un ticket
+                                            Ajouter un objet
                                         </button>
                                     </form>
                                 </div>
@@ -189,7 +169,7 @@
                                     <!-- Modal header -->
                                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            Modifier un ticket
+                                            Modifier un objet
                                         </h3>
                                         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="select-modal">
                                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -200,17 +180,47 @@
                                     </div>
                                     <!-- Modal body -->
                                     <form class="p-4 md:p-5">
-                                        <div class="grid gap-4 mb-4 grid-cols-2">
-                                            <div class="col-span-2">
-                                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titre</label>
-                                                <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Titre du ticket" required="">
+                                        <div class="gap-4 mb-4">
+                                            <div class="col-span-2 pb-3">
+                                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Identifiant de l'objet</label>
+                                                <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Écrivez la l'identifiant de l'objet ici" required="">
                                             </div>
-                                            <div class="col-span-2">
+                                            <div class="col-span-2 pb-3">
                                                 <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
                                                 <textarea id="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Écrivez la description du billet ici"></textarea>                    
                                             </div>
-                                            <div class="col-span-2">
-                                                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date</label>
+                                            <!-- Dropdown of categorie name -->
+                                            <div class="col-span-2 pb-3">
+                                                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Catégorie</label>
+                                                <select id="categorie" name="categorie" class="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                    <option value="1">Electronique</option>
+                                                    <option value="2">Mobilier</option>
+                                                    <option value="3">Vêtements</option>
+                                                    <option value="4">Autres</option>
+                                                </select>
+                                            </div>
+                                            <!-- checkbox of status -->
+                                            <div class="col-span-2 pb-3">
+                                                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
+                                                <div class="flex items
+                                                -center space-x-2">
+                                                    <input type="checkbox" id="status" name="status" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                    <label for="status" class="text-sm text-gray-900 dark:text-white">Disponible</label>
+                                                </div>
+                                            </div>
+                                            <!-- Condition -->
+                                            <div class="col-span-2 pb-3">
+                                                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Condition</label>
+                                                <select id="condition" name="condition" class="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                    <option value="1">Neuf</option>
+                                                    <option value="2">Bon</option>
+                                                    <option value="3">Moyen</option>
+                                                    <option value="4">Mauvais</option>
+                                                </select>
+                                            </div>
+                                            <!-- Date d'achat -->
+                                            <div class="col-span-2 pb-3">
+                                                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date d'achat</label>
                                                 <div class="relative max-w-sm">
                                                 <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                                     <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -220,9 +230,25 @@
                                                 <input datepicker id="default-datepicker" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
                                                 </div>
                                             </div>
+                                            <!-- Image -->
+                                            <div class="col-span-2 pb-3">
+                                                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Image</label>
+                                                <div class="flex items-center justify-center w-full">
+                                                    <label for="dropzone-file" class="flex flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                                            </svg>
+                                                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Cliquer pour téléverser</span> ou cliquer déposer</p>
+                                                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
+                                                        </div>
+                                                        <input id="dropzone-file" type="file" class="hidden" />
+                                                    </label>
+                                                </div> 
+                                            </div>
                                         </div>
                                         <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                            Modifier le ticket
+                                            Modifier l'objet
                                         </button>
                                     </form>
                                 </div>
@@ -292,5 +318,36 @@
                 });
                 });
             });
+
+            document.getElementById('exportButton').addEventListener('click', () => {
+                // Make a GET request to the backend to export data
+                fetch('/admin/export/data', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'text/csv', // Specify that we expect CSV
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.blob(); // Get the response as a Blob
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob); // Create a URL for the Blob
+                    const a = document.createElement('a'); // Create an anchor element
+                    a.href = url; // Set the href to the Blob URL
+                    a.download = 'inventory.csv'; // Set the filename for the download
+                    document.body.appendChild(a); // Append the anchor to the body
+                    a.click(); // Programmatically click the anchor to trigger the download
+                    a.remove(); // Remove the anchor from the document
+                    window.URL.revokeObjectURL(url); // Free up memory by revoking the Blob URL
+                })
+                .catch(error => {
+                    console.error('Error exporting data:', error);
+                    alert('There was an error exporting the data.');
+                });
+            });
+
             </script>
 

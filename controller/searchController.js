@@ -9,15 +9,15 @@ const search = async (req,res) => {
         let type = req.query.type;
 
         // Status
-        let statuses = query.match(/status:[open|ongoing|closed]/g);
-        if (statuses) {
-            statuses = statuses.map(status => status.substring(7));
+        let status = query.match(/status:[open|ongoing|closed]/g);
+        if (status) {
+            status = status.map(status => status.substring(7));
         } else {
-            statuses = ["open", "ongoing", "closed"];
+            status = ["open", "ongoing", "closed"];
         }
         query = query.replace(/status:[open|ongoing|closed]/g, "");
 
-        statuses = statuses.map(status => {
+        status = status.map(status => {
             if (status === "open") {
                 return 0;
             } else if (status === "ongoing") {

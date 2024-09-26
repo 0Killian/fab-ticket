@@ -3,12 +3,13 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const config = require('../config');
-const sequelize = require('./sequelize/database');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const front_router = require('./front');
 const path = require('path');
 const hbs = require('hbs');
 const api = require('./api');
+const fs = require('fs');
 
 const baseUrl = `${config.protocol}://${config.hostname}:${config.port}`;
 
@@ -17,6 +18,9 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 // Enable CORS
 app.use(cors());
+
+// Enable cookies handling
+app.use(cookieParser());
 
 // App context
 app.set('config', config);
@@ -39,6 +43,19 @@ app.locals = {
 app.use('/', front_router);
 app.use('/api', api);
 
+// Error handling middleware for 404
+app.use((req, res, next) => {
+  res.status(404);
+  res.render('errors/404'); // Render the 404 page
+});
+
+// Error handling middleware for 500
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log the error stack
+  res.status(500);
+  res.render('errors/500'); // Render the 500 page
+});
+
 // Configuration du serveur
 let opts = {};
 if (config.https) {
@@ -47,6 +64,19 @@ if (config.https) {
     cert: fs.readFileSync(config.https.cert)
   };
 }
+
+// Error handling middleware for 404
+app.use((req, res, next) => {
+  res.status(404);
+  res.render('errors/404');
+});
+
+// Error handling middleware for 500
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500);
+  res.render('errors/500'); 
+});
 
 const server = http.createServer(opts, app);
 
