@@ -209,7 +209,9 @@ adminRouter.get('/dashboard', async (req, res) => {
 });
 
 adminRouter.get('/inventory', async (req, res) => {
-  let materials = await Material.findAll();
+  let materials = await Material.findAll({
+    include: ['category', 'condition'],
+});
 
   // change the date format
   materials.forEach(material => {
